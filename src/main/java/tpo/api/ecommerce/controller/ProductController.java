@@ -11,6 +11,8 @@ import tpo.api.ecommerce.service.ProductService;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -30,6 +32,13 @@ public class ProductController {
     public ProductDTO createProduct(
             @Valid @RequestBody ProductDTO dto) {
         return service.createProduct(dto);
+    }
+
+    @PatchMapping("/{productId}")
+    public ProductDTO updateProduct(
+            @PathVariable Long productId,
+            @Valid @RequestBody ProductDTO dto) {
+        return service.updateProduct(productId, dto);
     }
 
 }

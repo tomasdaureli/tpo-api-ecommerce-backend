@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import tpo.api.ecommerce.domain.ProductDTO;
+import tpo.api.ecommerce.entity.Product;
+import tpo.api.ecommerce.error.ProductNotFoundException;
 import tpo.api.ecommerce.mapper.ProductMapper;
 import tpo.api.ecommerce.repository.ProductRepository;
 import tpo.api.ecommerce.service.ProductService;
@@ -28,6 +30,14 @@ public class ProductServiceImpl implements ProductService {
 	public ProductDTO createProduct(ProductDTO dto) {
 		return mapper.toProductDTO(
 				repository.save(mapper.toProduct(dto)));
+	}
+
+	@Override
+	public ProductDTO updateProduct(Long productId, ProductDTO dto) {
+		Product product = repository.findById(productId)
+				.orElseThrow(ProductNotFoundException::new);
+		return mapper.toProductDTO(
+				repository.save(mapper.toUpdateProduct(dto, product)));
 	}
 
 }
