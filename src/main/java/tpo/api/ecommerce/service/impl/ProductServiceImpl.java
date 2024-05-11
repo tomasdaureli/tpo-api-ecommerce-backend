@@ -27,6 +27,13 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public ProductDTO getProductById(Long productId) {
+		Product product = repository.findById(productId)
+				.orElseThrow(ProductNotFoundException::new);
+		return mapper.toProductDTO(product);
+	}
+
+	@Override
 	public ProductDTO createProduct(ProductDTO dto) {
 		return mapper.toProductDTO(
 				repository.save(mapper.toProduct(dto)));

@@ -28,6 +28,12 @@ public class ProductController {
         return service.getProducts();
     }
 
+    @GetMapping("/{productId}")
+    public ProductDTO getMethodName(
+            @PathVariable Long productId) {
+        return service.getProductById(productId);
+    }
+
     @PostMapping
     public ProductDTO createProduct(
             @Valid @RequestBody ProductDTO dto) {
