@@ -1,4 +1,3 @@
--- Active: 1715090636063@@localhost@33060
 -- Crear schema para la aplicacion
 CREATE DATABASE `ecommerce-app`;
 
