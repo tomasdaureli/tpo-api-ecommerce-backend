@@ -1,13 +1,16 @@
 package tpo.api.ecommerce.error;
 
-import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 import tpo.api.ecommerce.entity.Product;
 
 @SuppressWarnings("serial")
-public class ProductNotFoundException extends EntityNotFoundException {
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class ProductNotFoundException extends RuntimeException {
 
     public ProductNotFoundException() {
-        super(Product.class.getSimpleName());
+        super(Product.class.getCanonicalName());
     }
 
 }
