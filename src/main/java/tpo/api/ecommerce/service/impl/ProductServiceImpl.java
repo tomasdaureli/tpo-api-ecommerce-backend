@@ -38,17 +38,17 @@ public class ProductServiceImpl implements ProductService {
 					CategoryProduct.valueOf(category));
 		}
 
-		return repository.findAll().stream()
-				.map(mapper::toProductDTO).toList();
-	}
-
-	private List<ProductDTO> getProductsBySubcategory(SubcategoryProduct subcategory) {
-		return repository.findBySubcategory(subcategory).stream()
+		return repository.findByQuantityGreaterThan(0).stream()
 				.map(mapper::toProductDTO).toList();
 	}
 
 	private List<ProductDTO> getProductsByCategory(CategoryProduct category) {
-		return repository.findByCategory(category).stream()
+		return repository.findByCategoryAndQuantityGreaterThan(category, 0).stream()
+				.map(mapper::toProductDTO).toList();
+	}
+
+	private List<ProductDTO> getProductsBySubcategory(SubcategoryProduct subcategory) {
+		return repository.findBySubcategoryAndQuantityGreaterThan(subcategory, 0).stream()
 				.map(mapper::toProductDTO).toList();
 	}
 
