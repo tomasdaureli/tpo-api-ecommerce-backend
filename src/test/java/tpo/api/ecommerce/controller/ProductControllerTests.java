@@ -3,6 +3,7 @@ package tpo.api.ecommerce.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,7 +36,7 @@ class ProductControllerTests {
     @InjectMocks
     private ProductController controller;
 
-    private static final String PRODUCT_BODY = "{\"productName\": \"Nike Air Force 1 07 LX\", \"price\": 69.99, \"urlImage\": \"https://nikearprod.vtexassets.com/arquivos/ids/773739-1200-1200?width=1200&height=1200&aspect=true\", \"quantity\": 1, \"description\": \"Materiales premium. Acabados envejecidos. Comodidad amortiguada. Este modelo AF1 ofrece un estilo discreto y agrega el toque perfecto a tu look. Con su estilo de básquetbol retro y cuello cómodo de corte low, mantuvimos todo lo que amas de este básico de estilo moderno.\"}";
+    private static final String PRODUCT_BODY = "{\"productName\": \"Nike Air Force 1 07 LX\", \"price\": 69.99, \"urlImage\": \"https://nikearprod.vtexassets.com/arquivos/ids/773739-1200-1200?width=1200&height=1200&aspect=true\", \"quantity\": 1, \"description\": \"Materiales premium. Acabados envejecidos. Comodidad amortiguada. Este modelo AF1 ofrece un estilo discreto y agrega el toque perfecto a tu look. Con su estilo de básquetbol retro y cuello cómodo de corte low, mantuvimos todo lo que amas de este básico de estilo moderno.\", \"category\": \"FOOTWEAR\", \"subcategory\": \"SPORTS\"}";
 
     @BeforeEach
     void setUp() {
@@ -46,7 +47,7 @@ class ProductControllerTests {
     void testGetProducts() throws Exception {
         List<ProductDTO> expectedResponse = List.of(DummyDataUtils.buildProductDTO());
 
-        when(service.getProducts()).thenReturn(expectedResponse);
+        when(service.getProducts(anyString(), anyString())).thenReturn(expectedResponse);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
@@ -56,7 +57,7 @@ class ProductControllerTests {
 
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
 
-        verify(service, times(1)).getProducts();
+        verify(service, times(1)).getProducts(anyString(), anyString());
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
     }

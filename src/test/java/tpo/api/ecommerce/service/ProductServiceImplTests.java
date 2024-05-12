@@ -48,10 +48,12 @@ class ProductServiceImplTests {
     @Test
     void testGetProducts() {
         List<Product> products = List.of(DummyDataUtils.buildProduct());
+        String category = null;
+        String subcategory = null;
 
         when(repository.findAll()).thenReturn(products);
 
-        List<ProductDTO> response = service.getProducts();
+        List<ProductDTO> response = service.getProducts(category, subcategory);
 
         verify(repository, times(1)).findAll();
 

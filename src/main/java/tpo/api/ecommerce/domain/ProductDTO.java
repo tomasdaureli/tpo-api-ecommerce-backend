@@ -28,4 +28,8 @@ public class ProductDTO {
 
     private String description;
 
+    private CategoryProductDTO category;
+
+    private SubcategoryProductDTO subcategory;
+
 }
