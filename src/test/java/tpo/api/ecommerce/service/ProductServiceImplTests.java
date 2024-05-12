@@ -19,8 +19,12 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import tpo.api.ecommerce.domain.CategoryProductDTO;
 import tpo.api.ecommerce.domain.ProductDTO;
+import tpo.api.ecommerce.domain.SubcategoryProductDTO;
+import tpo.api.ecommerce.entity.CategoryProduct;
 import tpo.api.ecommerce.entity.Product;
+import tpo.api.ecommerce.entity.SubcategoryProduct;
 import tpo.api.ecommerce.error.ProductNotFoundException;
 import tpo.api.ecommerce.mapper.ProductMapper;
 import tpo.api.ecommerce.repository.ProductRepository;
@@ -56,6 +60,36 @@ class ProductServiceImplTests {
         List<ProductDTO> response = service.getProducts(category, subcategory);
 
         verify(repository, times(1)).findAll();
+
+        assertEquals("Air Jordan 1 Low", response.get(0).getProductName());
+    }
+
+    @Test
+    void testGetProductsByCategories() {
+        List<Product> products = List.of(DummyDataUtils.buildProduct());
+        String category = "FOOTWEAR";
+        String subcategory = null;
+
+        when(repository.findByCategory(any(CategoryProduct.class))).thenReturn(products);
+
+        List<ProductDTO> response = service.getProducts(category, subcategory);
+
+        verify(repository, times(1)).findByCategory(any(CategoryProduct.class));
+
+        assertEquals("Air Jordan 1 Low", response.get(0).getProductName());
+    }
+
+    @Test
+    void testGetProductsBySubcategories() {
+        List<Product> products = List.of(DummyDataUtils.buildProduct());
+        String category = null;
+        String subcategory = "FASHION";
+
+        when(repository.findBySubcategory(any(SubcategoryProduct.class))).thenReturn(products);
+
+        List<ProductDTO> response = service.getProducts(category, subcategory);
+
+        verify(repository, times(1)).findBySubcategory(any(SubcategoryProduct.class));
 
         assertEquals("Air Jordan 1 Low", response.get(0).getProductName());
     }
@@ -122,6 +156,24 @@ class ProductServiceImplTests {
         assertThrows(ProductNotFoundException.class, () -> service.updateProduct(100L, request));
 
         verify(repository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void testGetCategories() {
+        List<CategoryProductDTO> expectedResponse = DummyDataUtils.buildCategoriesList();
+
+        List<CategoryProductDTO> response = service.getCategories();
+
+        assertEquals(expectedResponse, response);
+    }
+
+    @Test
+    void testGetSubcategories() {
+        List<SubcategoryProductDTO> expectedResponse = DummyDataUtils.buildSubcategoriesList();
+
+        List<SubcategoryProductDTO> response = service.getSubcategories();
+
+        assertEquals(expectedResponse, response);
     }
 
 }
