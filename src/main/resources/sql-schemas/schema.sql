@@ -12,3 +12,7 @@ CREATE TABLE `products` (
     `quantity` INT,
     `description` TEXT
 );
+
+ALTER TABLE `products` ADD COLUMN `category` VARCHAR(255);
+
+ALTER TABLE `products` ADD COLUMN `subcategory` VARCHAR(255);
