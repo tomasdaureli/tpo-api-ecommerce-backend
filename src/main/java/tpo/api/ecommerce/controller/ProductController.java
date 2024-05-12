@@ -1,11 +1,14 @@
 package tpo.api.ecommerce.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import tpo.api.ecommerce.domain.CategoryProductDTO;
 import tpo.api.ecommerce.domain.ProductDTO;
+import tpo.api.ecommerce.domain.SubcategoryProductDTO;
 import tpo.api.ecommerce.service.ProductService;
 
 import java.util.List;
@@ -24,8 +27,10 @@ public class ProductController {
     private final ProductService service;
 
     @GetMapping
-    public List<ProductDTO> getProducts() {
-        return service.getProducts();
+    public List<ProductDTO> getProducts(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String subcategory) {
+        return service.getProducts(category, subcategory);
     }
 
     @GetMapping("/{productId}")
@@ -45,6 +50,16 @@ public class ProductController {
             @PathVariable Long productId,
             @Valid @RequestBody ProductDTO dto) {
         return service.updateProduct(productId, dto);
+    }
+
+    @GetMapping("/categories")
+    public List<CategoryProductDTO> getCategories() {
+        return service.getCategories();
+    }
+
+    @GetMapping("/categories/subcategories")
+    public List<SubcategoryProductDTO> getSubcategories() {
+        return service.getSubcategories();
     }
 
 }

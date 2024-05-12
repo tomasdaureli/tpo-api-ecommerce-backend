@@ -3,6 +3,7 @@ package tpo.api.ecommerce.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,7 +23,9 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import tpo.api.ecommerce.domain.CategoryProductDTO;
 import tpo.api.ecommerce.domain.ProductDTO;
+import tpo.api.ecommerce.domain.SubcategoryProductDTO;
 import tpo.api.ecommerce.error.ProductNotFoundException;
 import tpo.api.ecommerce.service.ProductService;
 import tpo.api.ecommerce.utils.DummyDataUtils;
@@ -35,7 +38,7 @@ class ProductControllerTests {
     @InjectMocks
     private ProductController controller;
 
-    private static final String PRODUCT_BODY = "{\"productName\": \"Nike Air Force 1 07 LX\", \"price\": 69.99, \"urlImage\": \"https://nikearprod.vtexassets.com/arquivos/ids/773739-1200-1200?width=1200&height=1200&aspect=true\", \"quantity\": 1, \"description\": \"Materiales premium. Acabados envejecidos. Comodidad amortiguada. Este modelo AF1 ofrece un estilo discreto y agrega el toque perfecto a tu look. Con su estilo de básquetbol retro y cuello cómodo de corte low, mantuvimos todo lo que amas de este básico de estilo moderno.\"}";
+    private static final String PRODUCT_BODY = "{\"productName\": \"Nike Air Force 1 07 LX\", \"price\": 69.99, \"urlImage\": \"https://nikearprod.vtexassets.com/arquivos/ids/773739-1200-1200?width=1200&height=1200&aspect=true\", \"quantity\": 1, \"description\": \"Materiales premium. Acabados envejecidos. Comodidad amortiguada. Este modelo AF1 ofrece un estilo discreto y agrega el toque perfecto a tu look. Con su estilo de básquetbol retro y cuello cómodo de corte low, mantuvimos todo lo que amas de este básico de estilo moderno.\", \"category\": \"FOOTWEAR\", \"subcategory\": \"SPORTS\"}";
 
     @BeforeEach
     void setUp() {
@@ -43,10 +46,10 @@ class ProductControllerTests {
     }
 
     @Test
-    void testGetProducts() throws Exception {
+    void testGetProductsWithoutParams() throws Exception {
         List<ProductDTO> expectedResponse = List.of(DummyDataUtils.buildProductDTO());
 
-        when(service.getProducts()).thenReturn(expectedResponse);
+        when(service.getProducts(anyString(), anyString())).thenReturn(expectedResponse);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
@@ -56,9 +59,34 @@ class ProductControllerTests {
 
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
 
-        verify(service, times(1)).getProducts();
+        verify(service, times(1)).getProducts(null, null);
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
+    }
+
+    @Test
+    void testGetProductsWithParams() throws Exception {
+        List<ProductDTO> expectedResponse = List.of(DummyDataUtils.buildProductDTO());
+
+        when(service.getProducts(anyString(), anyString())).thenReturn(expectedResponse);
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+        MockHttpServletRequestBuilder requestBuilderCategory = MockMvcRequestBuilders
+                .get("/products?category=FOOTWEAR")
+                .contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder requestBuilderSubcategory = MockMvcRequestBuilders
+                .get("/products?subcategory=SPORTS")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse responseCategory = mockMvc.perform(requestBuilderCategory).andReturn().getResponse();
+        MockHttpServletResponse responseSubcategory = mockMvc.perform(requestBuilderSubcategory).andReturn()
+                .getResponse();
+
+        verify(service, times(2)).getProducts(any(), any());
+
+        assertEquals(HttpStatus.OK.value(), responseCategory.getStatus());
+        assertEquals(HttpStatus.OK.value(), responseSubcategory.getStatus());
     }
 
     @Test
@@ -156,6 +184,44 @@ class ProductControllerTests {
         verify(service, times(1)).updateProduct(anyLong(), any(ProductDTO.class));
 
         assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
+    }
+
+    @Test
+    void testGetCategories() throws Exception {
+        List<CategoryProductDTO> expectedResponse = DummyDataUtils.buildCategoriesList();
+
+        when(service.getCategories()).thenReturn(expectedResponse);
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/products/categories")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
+
+        verify(service, times(1)).getCategories();
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+    }
+
+    @Test
+    void testGetSubcategories() throws Exception {
+        List<SubcategoryProductDTO> expectedResponse = DummyDataUtils.buildSubcategoriesList();
+
+        when(service.getSubcategories()).thenReturn(expectedResponse);
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/products/categories/subcategories")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
+
+        verify(service, times(1)).getSubcategories();
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
 
 }
