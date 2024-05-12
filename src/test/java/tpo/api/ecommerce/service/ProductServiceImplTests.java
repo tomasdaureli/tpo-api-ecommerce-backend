@@ -3,6 +3,7 @@ package tpo.api.ecommerce.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -55,11 +56,11 @@ class ProductServiceImplTests {
         String category = null;
         String subcategory = null;
 
-        when(repository.findAll()).thenReturn(products);
+        when(repository.findByQuantityGreaterThan(0)).thenReturn(products);
 
         List<ProductDTO> response = service.getProducts(category, subcategory);
 
-        verify(repository, times(1)).findAll();
+        verify(repository, times(1)).findByQuantityGreaterThan(0);
 
         assertEquals("Air Jordan 1 Low", response.get(0).getProductName());
     }
@@ -70,11 +71,12 @@ class ProductServiceImplTests {
         String category = "FOOTWEAR";
         String subcategory = null;
 
-        when(repository.findByCategory(any(CategoryProduct.class))).thenReturn(products);
+        when(repository.findByCategoryAndQuantityGreaterThan(any(CategoryProduct.class), anyInt()))
+                .thenReturn(products);
 
         List<ProductDTO> response = service.getProducts(category, subcategory);
 
-        verify(repository, times(1)).findByCategory(any(CategoryProduct.class));
+        verify(repository, times(1)).findByCategoryAndQuantityGreaterThan(any(CategoryProduct.class), anyInt());
 
         assertEquals("Air Jordan 1 Low", response.get(0).getProductName());
     }
@@ -85,11 +87,12 @@ class ProductServiceImplTests {
         String category = null;
         String subcategory = "FASHION";
 
-        when(repository.findBySubcategory(any(SubcategoryProduct.class))).thenReturn(products);
+        when(repository.findBySubcategoryAndQuantityGreaterThan(any(SubcategoryProduct.class), anyInt()))
+                .thenReturn(products);
 
         List<ProductDTO> response = service.getProducts(category, subcategory);
 
-        verify(repository, times(1)).findBySubcategory(any(SubcategoryProduct.class));
+        verify(repository, times(1)).findBySubcategoryAndQuantityGreaterThan(any(SubcategoryProduct.class), anyInt());
 
         assertEquals("Air Jordan 1 Low", response.get(0).getProductName());
     }
