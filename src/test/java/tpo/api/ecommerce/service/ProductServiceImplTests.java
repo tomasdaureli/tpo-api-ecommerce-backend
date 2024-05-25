@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import tpo.api.ecommerce.domain.CategoryProductDTO;
 import tpo.api.ecommerce.domain.ProductDTO;
@@ -33,6 +34,7 @@ import tpo.api.ecommerce.service.impl.ProductServiceImpl;
 import tpo.api.ecommerce.utils.DummyDataUtils;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class ProductServiceImplTests {
 
     @Mock

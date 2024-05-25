@@ -13,6 +13,9 @@ import tpo.api.ecommerce.domain.CreateItemProductDTO;
 import tpo.api.ecommerce.domain.ItemProductDTO;
 import tpo.api.ecommerce.domain.ProductDTO;
 import tpo.api.ecommerce.domain.SubcategoryProductDTO;
+import tpo.api.ecommerce.entity.Buy;
+import tpo.api.ecommerce.entity.BuyStatus;
+import tpo.api.ecommerce.entity.ItemProduct;
 import tpo.api.ecommerce.entity.Product;
 
 public class DummyDataUtils {
@@ -50,9 +53,7 @@ public class DummyDataUtils {
     public static CreateBuyRequestDTO buildCreateBuyRequestDTO() {
         CreateBuyRequestDTO request = new CreateBuyRequestDTO();
         CreateItemProductDTO item1 = new CreateItemProductDTO(1l, 1);
-        CreateItemProductDTO item2 = new CreateItemProductDTO(2l, 1);
-        CreateItemProductDTO item3 = new CreateItemProductDTO(3l, 1);
-        List<CreateItemProductDTO> items = List.of(item1, item2, item3);
+        List<CreateItemProductDTO> items = List.of(item1);
         request.setItems(items);
         return request;
     }
@@ -84,6 +85,26 @@ public class DummyDataUtils {
         response.setTotal(BigDecimal.valueOf(100));
         response.setStatus(BuyStatusDTO.PENDING);
         return response;
+    }
+
+    public static Buy buildBuy() {
+        Buy response = new Buy();
+        response.setNumber(1l);
+        response.setItems(buildItems());
+        response.setTotal(BigDecimal.valueOf(150));
+        response.setStatus(BuyStatus.PENDING);
+        return response;
+    }
+
+    public static ItemProduct buildItemProduct() {
+        ItemProduct item = new ItemProduct();
+        item.setProduct(buildProduct());
+        item.setQuantity(1);
+        return item;
+    }
+
+    public static List<ItemProduct> buildItems() {
+        return List.of(buildItemProduct());
     }
 
 }
