@@ -1,43 +1,42 @@
 package tpo.api.ecommerce.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "products")
-public class Product {
+@Entity(name = "buys")
+public class Buy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long number;
 
-    private String productName;
+    @OneToMany(mappedBy = "buy", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REMOVE }, fetch = FetchType.EAGER)
+    @ToString.Exclude
+    private List<ItemProduct> items;
 
-    private BigDecimal price;
-
-    private String urlImage;
-
-    private Integer stock;
-
-    private String description;
+    private BigDecimal total;
 
     @Enumerated(EnumType.STRING)
-    private CategoryProduct category;
-
-    @Enumerated(EnumType.STRING)
-    private SubcategoryProduct subcategory;
+    private BuyStatus status;
 
 }
