@@ -10,10 +10,10 @@ import tpo.api.ecommerce.entity.SubcategoryProduct;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    List<Product> findByQuantityGreaterThan(Integer quantity);
+    List<Product> findByStockGreaterThan(Integer quantity);
 
-    List<Product> findByCategoryAndQuantityGreaterThan(CategoryProduct category, Integer quantity);
+    List<Product> findByCategoryAndStockGreaterThan(CategoryProduct category, Integer quantity);
 
-    List<Product> findBySubcategoryAndQuantityGreaterThan(SubcategoryProduct subcategory, Integer quantity);
+    List<Product> findBySubcategoryAndStockGreaterThan(SubcategoryProduct subcategory, Integer quantity);
 
 }

@@ -17,7 +17,7 @@ public class DummyDataUtils {
         productDTO.setProductName("Air Jordan 1 Low");
         productDTO.setPrice(new BigDecimal(150));
         productDTO.setUrlImage("urlImage");
-        productDTO.setQuantity(1);
+        productDTO.setStock(1);
         productDTO.setDescription("Descripcion Air Jordan 1.");
         return productDTO;
     }
@@ -28,7 +28,7 @@ public class DummyDataUtils {
         product.setProductName("Air Jordan 1 Low");
         product.setPrice(new BigDecimal(150));
         product.setUrlImage("urlImage");
-        product.setQuantity(1);
+        product.setStock(1);
         product.setDescription("Descripcion Air Jordan 1.");
         return product;
     }

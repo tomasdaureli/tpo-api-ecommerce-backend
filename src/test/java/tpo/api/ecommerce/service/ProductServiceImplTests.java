@@ -56,11 +56,11 @@ class ProductServiceImplTests {
         String category = null;
         String subcategory = null;
 
-        when(repository.findByQuantityGreaterThan(0)).thenReturn(products);
+        when(repository.findByStockGreaterThan(0)).thenReturn(products);
 
         List<ProductDTO> response = service.getProducts(category, subcategory);
 
-        verify(repository, times(1)).findByQuantityGreaterThan(0);
+        verify(repository, times(1)).findByStockGreaterThan(0);
 
         assertEquals("Air Jordan 1 Low", response.get(0).getProductName());
     }
@@ -71,12 +71,12 @@ class ProductServiceImplTests {
         String category = "FOOTWEAR";
         String subcategory = null;
 
-        when(repository.findByCategoryAndQuantityGreaterThan(any(CategoryProduct.class), anyInt()))
+        when(repository.findByCategoryAndStockGreaterThan(any(CategoryProduct.class), anyInt()))
                 .thenReturn(products);
 
         List<ProductDTO> response = service.getProducts(category, subcategory);
 
-        verify(repository, times(1)).findByCategoryAndQuantityGreaterThan(any(CategoryProduct.class), anyInt());
+        verify(repository, times(1)).findByCategoryAndStockGreaterThan(any(CategoryProduct.class), anyInt());
 
         assertEquals("Air Jordan 1 Low", response.get(0).getProductName());
     }
@@ -87,12 +87,12 @@ class ProductServiceImplTests {
         String category = null;
         String subcategory = "FASHION";
 
-        when(repository.findBySubcategoryAndQuantityGreaterThan(any(SubcategoryProduct.class), anyInt()))
+        when(repository.findBySubcategoryAndStockGreaterThan(any(SubcategoryProduct.class), anyInt()))
                 .thenReturn(products);
 
         List<ProductDTO> response = service.getProducts(category, subcategory);
 
-        verify(repository, times(1)).findBySubcategoryAndQuantityGreaterThan(any(SubcategoryProduct.class), anyInt());
+        verify(repository, times(1)).findBySubcategoryAndStockGreaterThan(any(SubcategoryProduct.class), anyInt());
 
         assertEquals("Air Jordan 1 Low", response.get(0).getProductName());
     }
