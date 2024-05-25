@@ -1,0 +1,27 @@
+@startuml ecommerce
+
+!theme mars
+
+class Product<<Entity>> {
+    id: int
+    name: string
+    price: double
+    stock: int
+}
+
+class Buy<<Entity>> {
+    buyNumber: int
+    items: List<ItemProduct>
+    total: double
+}
+
+class ItemProduct {
+    buy: Buy
+    product: Product
+    quantity: int
+}
+
+Buy "1" *--* "*" ItemProduct
+ItemProduct "1" *-- "1" Product
+
+@enduml

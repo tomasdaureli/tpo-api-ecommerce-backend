@@ -1,6 +1,7 @@
 package tpo.api.ecommerce.domain;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -16,22 +17,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class ProductDTO {
+public class BuyDTO {
 
-    private Long id;
+    private Long number;
 
-    private String productName;
+    private List<ItemProductDTO> items;
 
-    private BigDecimal price;
+    private BigDecimal total;
 
-    private String urlImage;
-
-    private Integer stock;
-
-    private String description;
-
-    private CategoryProductDTO category;
-
-    private SubcategoryProductDTO subcategory;
+    private BuyStatusDTO status;
 
 }
