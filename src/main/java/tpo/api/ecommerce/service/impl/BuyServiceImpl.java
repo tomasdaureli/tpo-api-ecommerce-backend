@@ -7,18 +7,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import tpo.api.ecommerce.domain.BuyDTO;
-import tpo.api.ecommerce.domain.CreateBuyRequestDTO;
-import tpo.api.ecommerce.domain.CreateBuyResponseDTO;
-import tpo.api.ecommerce.domain.CreateItemProductDTO;
-import tpo.api.ecommerce.domain.WarningDTO;
-import tpo.api.ecommerce.entity.Buy;
-import tpo.api.ecommerce.entity.BuyStatus;
-import tpo.api.ecommerce.entity.ItemProduct;
-import tpo.api.ecommerce.entity.Product;
-import tpo.api.ecommerce.error.BuyAlreadyProcessedException;
-import tpo.api.ecommerce.error.BuyNotFoundException;
-import tpo.api.ecommerce.error.ProductNotFoundException;
+import tpo.api.ecommerce.domain.*;
+import tpo.api.ecommerce.entity.*;
+import tpo.api.ecommerce.error.*;
 import tpo.api.ecommerce.mapper.BuyMapper;
 import tpo.api.ecommerce.repository.BuyRepository;
 import tpo.api.ecommerce.repository.ProductRepository;
@@ -114,7 +105,20 @@ public class BuyServiceImpl implements BuyService {
             p.getProduct().setStock(p.getProduct().getStock() - p.getQuantity());
             productRepository.save(p.getProduct());
         });
-
     }
 
+    @Override
+    public BuyDTO cancelBuy(Long buyNumber) {
+        Buy buy = buyRepository.findById(buyNumber)
+                .orElseThrow(BuyNotFoundException::new);
+
+        if (BuyStatus.CANCELLED.equals(buy.getStatus())
+                || BuyStatus.CONFIRMED.equals(buy.getStatus())) {
+            throw new BuyAlreadyProcessedException(buy.getStatus().toString());
+        }
+
+        buy.setStatus(BuyStatus.CANCELLED);
+
+        return mapper.toBuyDTO(buyRepository.save(buy));
+    }
 }

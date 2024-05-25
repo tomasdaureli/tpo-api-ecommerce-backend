@@ -41,4 +41,10 @@ public class BuyController {
         return service.confirmBuy(buyNumber);
     }
 
+    @PatchMapping("/{buyNumber}/cancel")
+    public BuyDTO cancelBuy(
+            @PathVariable Long buyNumber) {
+        return service.cancelBuy(buyNumber);
+    }
+
 }
