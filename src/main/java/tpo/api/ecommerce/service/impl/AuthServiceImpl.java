@@ -1,7 +1,6 @@
 package tpo.api.ecommerce.service.impl;
 
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -23,13 +22,14 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
 
-    private final AuthMapper mapper;
+    private final PasswordEncoder passwordEncoder;
 
-    // private final AuthenticationManager authManager;
+    private final AuthMapper mapper;
 
     @Override
     public AuthenticationResponseDTO registerUser(RegisterRequestDTO request) {
         User user = mapper.toUser(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
 
         String accessToken = jwtService.generateToken(user.getId().toString(), user.getEmail());
@@ -39,12 +39,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthenticationResponseDTO authenticateUser(AuthenticationRequestDTO request) {
-        // authManager.authenticate(
-        // new UsernamePasswordAuthenticationToken(request.getEmail(),
-        // request.getPassword()));
-
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(UserNotFoundException::new);
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Credenciales invalidas");
+        }
 
         String accessToken = jwtService.generateToken(user.getId().toString(), user.getEmail());
 
