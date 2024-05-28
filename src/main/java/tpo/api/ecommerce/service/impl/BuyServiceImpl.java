@@ -11,9 +11,11 @@ import tpo.api.ecommerce.domain.*;
 import tpo.api.ecommerce.entity.*;
 import tpo.api.ecommerce.error.*;
 import tpo.api.ecommerce.mapper.BuyMapper;
+import tpo.api.ecommerce.mapper.UserMapper;
 import tpo.api.ecommerce.repository.BuyRepository;
 import tpo.api.ecommerce.repository.ProductRepository;
 import tpo.api.ecommerce.service.BuyService;
+import tpo.api.ecommerce.service.UserService;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +25,11 @@ public class BuyServiceImpl implements BuyService {
 
     private final ProductRepository productRepository;
 
-    private final BuyMapper mapper;
+    private final BuyMapper buyMapper;
+
+    private final UserService userService;
+
+    private final UserMapper userMapper;
 
     @Override
     public CreateBuyResponseDTO createBuy(CreateBuyRequestDTO request) {
@@ -39,8 +45,9 @@ public class BuyServiceImpl implements BuyService {
         buy.setItems(items);
         buy.setTotal(calculateTotal(items));
         buy.setStatus(BuyStatus.PENDING);
+        buy.setBuyer(userMapper.toUser(userService.getAuthenticatedUser()));
 
-        return mapper.toCreateBuyResponseDTO(buyRepository.save(buy), response);
+        return buyMapper.toCreateBuyResponseDTO(buyRepository.save(buy), response);
     }
 
     private List<ItemProduct> addItemsToBuy(List<CreateItemProductDTO> request, CreateBuyResponseDTO response,
@@ -80,7 +87,7 @@ public class BuyServiceImpl implements BuyService {
 
     @Override
     public BuyDTO getBuyByNumber(Long buyNumber) {
-        return mapper.toBuyDTO(buyRepository.findById(buyNumber)
+        return buyMapper.toBuyDTO(buyRepository.findById(buyNumber)
                 .orElseThrow(BuyNotFoundException::new));
     }
 
@@ -97,7 +104,7 @@ public class BuyServiceImpl implements BuyService {
         buy.setStatus(BuyStatus.CONFIRMED);
         updateProductsStock(buy.getItems());
 
-        return mapper.toBuyDTO(buyRepository.save(buy));
+        return buyMapper.toBuyDTO(buyRepository.save(buy));
     }
 
     private void updateProductsStock(List<ItemProduct> products) {
@@ -119,6 +126,6 @@ public class BuyServiceImpl implements BuyService {
 
         buy.setStatus(BuyStatus.CANCELLED);
 
-        return mapper.toBuyDTO(buyRepository.save(buy));
+        return buyMapper.toBuyDTO(buyRepository.save(buy));
     }
 }

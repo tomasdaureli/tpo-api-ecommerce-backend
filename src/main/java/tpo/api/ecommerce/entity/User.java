@@ -18,22 +18,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity(name = "users")
 public class User {
- 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
- 
+
     private String name;
- 
+
     private String lastName;
- 
+
     private String email;
- 
+
     private String password;
- 
+
     @OneToMany(mappedBy = "buyer")
     private List<Buy> buys;
- 
-    
-    
+
 }
