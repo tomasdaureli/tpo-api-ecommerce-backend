@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tpo.api.ecommerce.error.BuyAlreadyProcessedException;
 import tpo.api.ecommerce.error.BuyNotFoundException;
+import tpo.api.ecommerce.error.InvalidCredentialsException;
 import tpo.api.ecommerce.error.ProductNotFoundException;
 import tpo.api.ecommerce.error.UserNotFoundException;
 
@@ -17,6 +18,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(MethodArgumentNotValidException ex) {
         return new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleInvalidCredentialsException(InvalidCredentialsException ex) {
+        return new ErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
     @ExceptionHandler(BuyAlreadyProcessedException.class)
