@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
+import tpo.api.ecommerce.domain.AuthenticationRequestDTO;
 import tpo.api.ecommerce.domain.BuyDTO;
 import tpo.api.ecommerce.domain.BuyStatusDTO;
 import tpo.api.ecommerce.domain.CategoryProductDTO;
@@ -12,11 +13,13 @@ import tpo.api.ecommerce.domain.CreateBuyResponseDTO;
 import tpo.api.ecommerce.domain.CreateItemProductDTO;
 import tpo.api.ecommerce.domain.ItemProductDTO;
 import tpo.api.ecommerce.domain.ProductDTO;
+import tpo.api.ecommerce.domain.RegisterRequestDTO;
 import tpo.api.ecommerce.domain.SubcategoryProductDTO;
 import tpo.api.ecommerce.entity.Buy;
 import tpo.api.ecommerce.entity.BuyStatus;
 import tpo.api.ecommerce.entity.ItemProduct;
 import tpo.api.ecommerce.entity.Product;
+import tpo.api.ecommerce.entity.User;
 
 public class DummyDataUtils {
 
@@ -105,6 +108,32 @@ public class DummyDataUtils {
 
     public static List<ItemProduct> buildItems() {
         return List.of(buildItemProduct());
+    }
+
+    public static RegisterRequestDTO buildRegisterRequestDTO() {
+        RegisterRequestDTO request = new RegisterRequestDTO();
+        request.setName("Pepe");
+        request.setLastName("Pepito");
+        request.setEmail("pepepepito@test.com");
+        request.setPassword("12345");
+        return request;
+    }
+
+    public static AuthenticationRequestDTO buildAuthenticationRequestDTO() {
+        AuthenticationRequestDTO request = new AuthenticationRequestDTO();
+        request.setEmail("test@test.com");
+        request.setPassword("12345");
+        return request;
+    }
+
+    public static User buildUser() {
+        User user = new User();
+        user.setId(1L);
+        user.setName("Pepe");
+        user.setLastName("Pepito");
+        user.setEmail("test@test.com");
+        user.setPassword("encryptedPassword");
+        return user;
     }
 
 }

@@ -3,14 +3,24 @@
 !theme mars
 
 class Product<<Entity>> {
-    id: int
+    id: long
     name: string
     price: double
     stock: int
 }
 
+class User<<Entity>> {
+    id: long
+    name: string
+    lastName: string
+    email: string
+    password: string
+    buys: List<Buy>
+}
+
 class Buy<<Entity>> {
-    buyNumber: int
+    buyNumber: long
+    buyer: User
     items: List<ItemProduct>
     total: double
 }
