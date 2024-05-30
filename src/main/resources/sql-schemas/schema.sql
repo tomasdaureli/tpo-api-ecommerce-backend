@@ -11,12 +11,10 @@ CREATE TABLE `products` (
     `price` DECIMAL(10, 2) NOT NULL,
     `url_image` VARCHAR(255),
     `stock` INT,
-    `description` TEXT
+    `description` TEXT,
+    `category` VARCHAR(255),
+    `subcategory` VARCHAR(255)
 );
-
-ALTER TABLE `products` ADD COLUMN `category` VARCHAR(255);
-
-ALTER TABLE `products` ADD COLUMN `subcategory` VARCHAR(255);
 
 -- Creacion de la tabla users
 CREATE TABLE `users` (
@@ -33,11 +31,12 @@ CREATE TABLE `buys` (
     `total` DECIMAL(19, 2) NOT NULL,
     `status` VARCHAR(255),
     `buyer_id` BIGINT NOT NULL,
-    FOREIGN KEY (`buyer`) REFERENCES `users` (`id`)
+    FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`)
 );
 
 -- Creacion de la tabla item_products
 CREATE TABLE `item_products` (
+    `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
     `buy_number` BIGINT NOT NULL,
     `product_id` BIGINT NOT NULL,
     `quantity` INT NOT NULL,

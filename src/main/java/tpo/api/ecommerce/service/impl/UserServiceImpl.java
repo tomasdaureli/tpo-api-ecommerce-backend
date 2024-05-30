@@ -1,5 +1,6 @@
 package tpo.api.ecommerce.service.impl;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -20,10 +21,25 @@ public class UserServiceImpl implements UserService {
 
     private final SecurityContextService contextService;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public UserDTO getAuthenticatedUser() {
         return mapper.toUserDTO(repository.findByEmail(
                 contextService.getAuthenticatedUser()).orElseThrow(UserNotFoundException::new));
+    }
+
+    @Override
+    public UserDTO updateUser(Long id, UserDTO dto) {
+        return repository.findById(id)
+                .map(user -> {
+                    user.setName(dto.getName());
+                    user.setLastName(dto.getLastName());
+                    user.setEmail(dto.getEmail());
+                    user.setPassword(passwordEncoder.encode(dto.getPassword()));
+                    return mapper.toUserDTO(repository.save(user));
+                })
+                .orElse(null);
     }
 
 }
