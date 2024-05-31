@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
                     user.setLastName(dto.getLastName());
                     user.setEmail(dto.getEmail());
                     user.setPassword(passwordEncoder.encode(dto.getPassword()));
+                    user.setRole(dto.getRole());
                     return mapper.toUserDTO(repository.save(user));
                 })
                 .orElseThrow(UserNotFoundException::new);

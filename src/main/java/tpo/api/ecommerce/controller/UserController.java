@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import tpo.api.ecommerce.domain.UserDTO;
+import tpo.api.ecommerce.domain.UserResponseDTO;
+import tpo.api.ecommerce.mapper.UserMapper;
 import tpo.api.ecommerce.service.UserService;
 
 import org.springframework.http.ResponseEntity;
@@ -20,20 +22,21 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class UserController {
 
     private final UserService service;
+    private final UserMapper mapper;
 
     @GetMapping("/me")
     @PreAuthorize("hasRole('VENDEDOR')")
-    public UserDTO getAuthenticatedUser() {
-        return service.getAuthenticatedUser();
+    public UserResponseDTO getAuthenticatedUser() {
+        return mapper.toUserResponseDTO(service.getAuthenticatedUser());
     }
 
     @PutMapping("/change")
-    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDto) {
+    public ResponseEntity<UserResponseDTO> updateUser(@Valid @RequestBody UserDTO userDto) {
         UserDTO updatedUser = service.updateUser(userDto);
         if (updatedUser == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(updatedUser);
+        return ResponseEntity.ok(mapper.toUserResponseDTO(updatedUser));
     }
 
 }
