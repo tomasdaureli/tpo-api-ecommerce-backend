@@ -10,6 +10,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import tpo.api.ecommerce.domain.BuyDTO;
 import tpo.api.ecommerce.domain.ItemProductDTO;
 import tpo.api.ecommerce.domain.UserDTO;
+import tpo.api.ecommerce.domain.UserResponseDTO;
 import tpo.api.ecommerce.entity.Buy;
 import tpo.api.ecommerce.entity.ItemProduct;
 import tpo.api.ecommerce.entity.User;
@@ -18,6 +19,8 @@ import tpo.api.ecommerce.entity.User;
 public interface UserMapper {
 
     UserDTO toUserDTO(User entity);
+
+    UserResponseDTO toUserResponseDTO(UserDTO dto);
 
     User toUser(UserDTO dto);
 
