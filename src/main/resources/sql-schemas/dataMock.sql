@@ -15,9 +15,9 @@ VALUES
 -- Inserción de datos en la tabla `users`
 INSERT INTO `users` (`name`, `last_name`, `email`, `password`,`role`)
 VALUES 
-('Juan', 'Pérez', 'juan.perez@example.com', 'password123',`VISITANTE`),
-('Ana', 'Lopez', 'ana.lopez@example.com', 'securepassword',`VENDEDOR`),
-('Carlos', 'Martinez', 'carlos.martinez@example.com', 'mypassword',`COMPRADOR`);
+('Juan', 'Pérez', 'juan@example.com', '$2a$10$o1sX1nZfv2/oZwZ64gt61.tefx1hLzIAH2kv8Y0U0S2xuDleqE2Aa',`VENDEDOR`),
+('Ana', 'Lopez', 'ana@example.com', '$2a$10$o1sX1nZfv2/oZwZ64gt61.tefx1hLzIAH2kv8Y0U0S2xuDleqE2Aa',`VISITANTE`),
+('Carlos', 'Martinez', 'carlos@example.com', '$2a$10$o1sX1nZfv2/oZwZ64gt61.tefx1hLzIAH2kv8Y0U0S2xuDleqE2Aa',`COMPRADOR`);
 
 -- Inserción de datos en la tabla `buys`
 INSERT INTO `buys` (`total`, `status`, `buyer_id`)
