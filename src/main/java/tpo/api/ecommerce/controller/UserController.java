@@ -22,7 +22,6 @@ public class UserController {
     private final UserService service;
 
     @GetMapping("/me")
-    @PreAuthorize("hasRole('VENDEDOR')")
     public UserDTO getAuthenticatedUser() {
         return service.getAuthenticatedUser();
     }

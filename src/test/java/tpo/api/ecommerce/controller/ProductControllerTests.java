@@ -29,11 +29,15 @@ import tpo.api.ecommerce.domain.SubcategoryProductDTO;
 import tpo.api.ecommerce.error.ProductNotFoundException;
 import tpo.api.ecommerce.service.ProductService;
 import tpo.api.ecommerce.utils.DummyDataUtils;
+import tpo.api.ecommerce.utils.UserValidations;
 
 class ProductControllerTests {
 
     @Mock
     private ProductService service;
+
+    @Mock
+    private UserValidations userValidations;
 
     @InjectMocks
     private ProductController controller;
