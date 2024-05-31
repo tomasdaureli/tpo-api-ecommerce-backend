@@ -27,11 +27,15 @@ import tpo.api.ecommerce.error.BuyAlreadyProcessedException;
 import tpo.api.ecommerce.error.BuyNotFoundException;
 import tpo.api.ecommerce.service.BuyService;
 import tpo.api.ecommerce.utils.DummyDataUtils;
+import tpo.api.ecommerce.utils.UserValidations;
 
 class BuyControllerTests {
 
     @Mock
     private BuyService service;
+
+    @Mock
+    private UserValidations userValidations;
 
     @InjectMocks
     private BuyController controller;
