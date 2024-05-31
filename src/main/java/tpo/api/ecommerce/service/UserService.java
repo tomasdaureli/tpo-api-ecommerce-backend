@@ -8,4 +8,6 @@ public interface UserService {
 
     UserDTO updateUser(UserDTO dto);
 
+    UserDTO getUserById(Long id);
+
 }

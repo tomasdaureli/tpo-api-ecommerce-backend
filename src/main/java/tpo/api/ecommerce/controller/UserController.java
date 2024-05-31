@@ -14,6 +14,7 @@ import tpo.api.ecommerce.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +27,11 @@ public class UserController {
     @GetMapping("/me")
     public UserResponseDTO getAuthenticatedUser() {
         return mapper.toUserResponseDTO(service.getAuthenticatedUser());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(mapper.toUserResponseDTO(service.getUserById(id)));
     }
 
     @PutMapping("/change")
