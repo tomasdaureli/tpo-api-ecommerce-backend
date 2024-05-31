@@ -41,11 +41,11 @@ class UserServiceImplTests {
     @Mock
     private SecurityContextService contextService;
 
-    @InjectMocks
-    private UserServiceImpl service;
-
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @InjectMocks
+    private UserServiceImpl service;
 
     @BeforeEach
     void setUp() {

@@ -30,8 +30,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(Long id, UserDTO dto) {
-        return repository.findById(id)
+    public UserDTO updateUser(UserDTO dto) {
+        return repository.findByEmail(contextService.getAuthenticatedUser())
                 .map(user -> {
                     user.setName(dto.getName());
                     user.setLastName(dto.getLastName());
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
                     user.setPassword(passwordEncoder.encode(dto.getPassword()));
                     return mapper.toUserDTO(repository.save(user));
                 })
-                .orElse(null);
+                .orElseThrow(UserNotFoundException::new);
     }
 
 }

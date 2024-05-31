@@ -9,10 +9,14 @@ import lombok.RequiredArgsConstructor;
 import tpo.api.ecommerce.domain.CategoryProductDTO;
 import tpo.api.ecommerce.domain.ProductDTO;
 import tpo.api.ecommerce.domain.SubcategoryProductDTO;
+import tpo.api.ecommerce.entity.UserRoles;
 import tpo.api.ecommerce.service.ProductService;
+import tpo.api.ecommerce.utils.UserValidations;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ProductController {
 
     private final ProductService service;
+
+    private final UserValidations userValidations;
 
     @GetMapping
     public List<ProductDTO> getProducts(
@@ -40,16 +46,26 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDTO createProduct(
-            @Valid @RequestBody ProductDTO dto) {
-        return service.createProduct(dto);
+    public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDTO dto) {
+        try {
+            userValidations.validateRole(UserRoles.VENDEDOR);
+            return ResponseEntity.ok(service.createProduct(dto));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
     }
 
     @PatchMapping("/{productId}")
-    public ProductDTO updateProduct(
+    public ResponseEntity<?> updateProduct(
             @PathVariable Long productId,
             @Valid @RequestBody ProductDTO dto) {
-        return service.updateProduct(productId, dto);
+        try {
+            userValidations.validateRole(UserRoles.VENDEDOR);
+            return ResponseEntity.ok(service.updateProduct(productId, dto));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+
     }
 
     @GetMapping("/categories")
