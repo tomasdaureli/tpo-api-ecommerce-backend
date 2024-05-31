@@ -30,6 +30,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO getUserById(Long id) {
+        return mapper.toUserDTO(repository.findById(id)
+                .orElseThrow(UserNotFoundException::new));
+    }
+
+    @Override
     public UserDTO updateUser(UserDTO dto) {
         return repository.findByEmail(contextService.getAuthenticatedUser())
                 .map(user -> {
