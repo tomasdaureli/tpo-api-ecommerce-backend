@@ -24,8 +24,8 @@ public class UserController {
     private final UserMapper mapper;
 
     @GetMapping("/me")
-    public UserDTO getAuthenticatedUser() {
-        return service.getAuthenticatedUser();
+    public UserResponseDTO getAuthenticatedUser() {
+        return mapper.toUserResponseDTO(service.getAuthenticatedUser());
     }
 
     @PutMapping("/change")
