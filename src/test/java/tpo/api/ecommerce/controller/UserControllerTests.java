@@ -19,13 +19,15 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import tpo.api.ecommerce.domain.UserDTO;
+import tpo.api.ecommerce.mapper.UserMapper;
 import tpo.api.ecommerce.service.UserService;
 
 class UserControllerTests {
 
     @Mock
     private UserService service;
-
+    @Mock
+    private UserMapper mapper;
     @InjectMocks
     private UserController controller;
 
