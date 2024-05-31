@@ -12,7 +12,6 @@ import tpo.api.ecommerce.mapper.UserMapper;
 import tpo.api.ecommerce.service.UserService;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -25,9 +24,8 @@ public class UserController {
     private final UserMapper mapper;
 
     @GetMapping("/me")
-    @PreAuthorize("hasRole('VENDEDOR')")
-    public UserResponseDTO getAuthenticatedUser() {
-        return mapper.toUserResponseDTO(service.getAuthenticatedUser());
+    public UserDTO getAuthenticatedUser() {
+        return service.getAuthenticatedUser();
     }
 
     @PutMapping("/change")
