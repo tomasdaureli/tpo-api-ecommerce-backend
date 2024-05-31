@@ -6,6 +6,6 @@ public interface UserService {
 
     UserDTO getAuthenticatedUser();
 
-    UserDTO updateUser(Long id, UserDTO dto);
+    UserDTO updateUser(UserDTO dto);
 
 }

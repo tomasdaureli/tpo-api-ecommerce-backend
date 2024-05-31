@@ -3,6 +3,8 @@ package tpo.api.ecommerce.entity;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,6 +32,9 @@ public class User {
     private String email;
 
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private UserRoles role;
 
     @OneToMany(mappedBy = "buyer")
     private List<Buy> buys;

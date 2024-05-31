@@ -13,11 +13,11 @@ VALUES
 ('Outdoor Football', 40.00, 'https://example.com/outdoorfootball.jpg', 110, 'Balón de fútbol robusto para juegos en exteriores.', 'ACCESORIES', 'BALLS');
 
 -- Inserción de datos en la tabla `users`
-INSERT INTO `users` (`name`, `last_name`, `email`, `password`)
+INSERT INTO `users` (`name`, `last_name`, `email`, `password`,`role`)
 VALUES 
-('Juan', 'Pérez', 'juan.perez@example.com', 'password123'),
-('Ana', 'Lopez', 'ana.lopez@example.com', 'securepassword'),
-('Carlos', 'Martinez', 'carlos.martinez@example.com', 'mypassword');
+('Juan', 'Pérez', 'juan@example.com', '$2a$10$o1sX1nZfv2/oZwZ64gt61.tefx1hLzIAH2kv8Y0U0S2xuDleqE2Aa',`VENDEDOR`),
+('Ana', 'Lopez', 'ana@example.com', '$2a$10$o1sX1nZfv2/oZwZ64gt61.tefx1hLzIAH2kv8Y0U0S2xuDleqE2Aa',`VISITANTE`),
+('Carlos', 'Martinez', 'carlos@example.com', '$2a$10$o1sX1nZfv2/oZwZ64gt61.tefx1hLzIAH2kv8Y0U0S2xuDleqE2Aa',`COMPRADOR`);
 
 -- Inserción de datos en la tabla `buys`
 INSERT INTO `buys` (`total`, `status`, `buyer_id`)

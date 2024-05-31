@@ -10,8 +10,8 @@ import tpo.api.ecommerce.domain.UserDTO;
 import tpo.api.ecommerce.service.UserService;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
@@ -26,9 +26,9 @@ public class UserController {
         return service.getAuthenticatedUser();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable("id") Long id, @Valid @RequestBody UserDTO userDto) {
-        UserDTO updatedUser = service.updateUser(id, userDto);
+    @PutMapping("/change")
+    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDto) {
+        UserDTO updatedUser = service.updateUser(userDto);
         if (updatedUser == null) {
             return ResponseEntity.notFound().build();
         }

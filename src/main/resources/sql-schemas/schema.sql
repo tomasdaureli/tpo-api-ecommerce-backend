@@ -12,8 +12,9 @@ CREATE TABLE `products` (
     `url_image` VARCHAR(255),
     `stock` INT,
     `description` TEXT,
-    `category` VARCHAR(255),
-    `subcategory` VARCHAR(255)
+    `category` VARCHAR(255) CHECK (`category` IN ('FOOTWEAR', 'CLOTHES', 'ACCESORIES')),
+    `subcategory` VARCHAR(255) CHECK (`subcategory` IN ('FASHION', 'SPORTS', 'RUNNING', 'FOOTBALL', 'SANDALS', 'SHIRTS', 'SOCKS', 'CAPS',
+                          'BAGS', 'HOODIES', 'SHORTS', 'TROUSERS', 'BALLS'))
 );
 
 -- Creacion de la tabla users
@@ -22,7 +23,8 @@ CREATE TABLE `users` (
     `name` VARCHAR(255) NOT NULL,
     `last_name` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
-    `password` VARCHAR(255) NOT NULL
+    `password` VARCHAR(255) NOT NULL,
+    `role` VARCHAR(255) DEFAULT 'COMPRADOR' CHECK (role IN ('VISITANTE', 'VENDEDOR', 'COMPRADOR'));
 );
 
 -- Creacion de la tabla buys
