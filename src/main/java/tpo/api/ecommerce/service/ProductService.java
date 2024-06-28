@@ -20,4 +20,6 @@ public interface ProductService {
 
     List<SubcategoryProductDTO> getSubcategories();
 
+    void deleteProduct(Long productId);
+
 }

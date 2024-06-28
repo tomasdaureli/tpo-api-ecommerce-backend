@@ -85,4 +85,11 @@ public class ProductServiceImpl implements ProductService {
 				.map(mapper::toSubcategoryProductDTO).toList();
 	}
 
+	@Override
+	public void deleteProduct(Long productId) {
+		Product product = repository.findById(productId)
+				.orElseThrow(ProductNotFoundException::new);
+		repository.delete(product);
+	}
+
 }
