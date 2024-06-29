@@ -3,8 +3,10 @@ package tpo.api.ecommerce.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import tpo.api.ecommerce.domain.*;
@@ -13,6 +15,7 @@ import tpo.api.ecommerce.error.*;
 import tpo.api.ecommerce.mapper.BuyMapper;
 import tpo.api.ecommerce.mapper.UserMapper;
 import tpo.api.ecommerce.repository.BuyRepository;
+import tpo.api.ecommerce.repository.DiscountRepository;
 import tpo.api.ecommerce.repository.ProductRepository;
 import tpo.api.ecommerce.service.BuyService;
 import tpo.api.ecommerce.service.UserService;
@@ -31,6 +34,9 @@ public class BuyServiceImpl implements BuyService {
 
     private final UserMapper userMapper;
 
+    private final DiscountRepository discountRepository;
+
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public CreateBuyResponseDTO createBuy(CreateBuyRequestDTO request) {
         CreateBuyResponseDTO response = new CreateBuyResponseDTO();
@@ -43,7 +49,7 @@ public class BuyServiceImpl implements BuyService {
         }
 
         buy.setItems(items);
-        buy.setTotal(calculateTotal(items));
+        buy.setTotal(calculateTotal(items, Optional.ofNullable(request.getDiscountCode())));
         buy.setStatus(BuyStatus.PENDING);
         buy.setBuyer(userMapper.toUser(userService.getAuthenticatedUser()));
 
@@ -78,11 +84,27 @@ public class BuyServiceImpl implements BuyService {
         return product.getStock() >= quantity;
     }
 
-    private BigDecimal calculateTotal(List<ItemProduct> items) {
-        return items.stream()
+    private BigDecimal calculateTotal(List<ItemProduct> items, Optional<String> discountCode) {
+        BigDecimal total = items.stream()
                 .map(item -> item.getProduct().getPrice()
                         .multiply(new BigDecimal(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        if (discountCode.isPresent()) {
+            Discount discount = getDiscountByCode(discountCode.get());
+            if (discount != null) {
+                BigDecimal discountAmount = total
+                        .multiply(BigDecimal.valueOf(discount.getAmount()).divide(BigDecimal.valueOf(100)));
+                total = total.subtract(discountAmount);
+            }
+        }
+
+        return total;
+    }
+
+    private Discount getDiscountByCode(String discountCode) {
+        return discountRepository.findByCode(discountCode)
+                .orElseThrow(DiscountNotFoundException::new);
     }
 
     @Override
@@ -91,6 +113,7 @@ public class BuyServiceImpl implements BuyService {
                 .orElseThrow(BuyNotFoundException::new));
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public BuyDTO confirmBuy(Long buyNumber) {
         Buy buy = buyRepository.findById(buyNumber)
@@ -114,6 +137,7 @@ public class BuyServiceImpl implements BuyService {
         });
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public BuyDTO cancelBuy(Long buyNumber) {
         Buy buy = buyRepository.findById(buyNumber)

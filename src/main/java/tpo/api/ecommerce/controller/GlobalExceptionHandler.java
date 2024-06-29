@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tpo.api.ecommerce.error.BuyAlreadyProcessedException;
 import tpo.api.ecommerce.error.BuyNotFoundException;
+import tpo.api.ecommerce.error.DiscountNotFoundException;
 import tpo.api.ecommerce.error.InvalidCredentialsException;
 import tpo.api.ecommerce.error.ProductNotFoundException;
 import tpo.api.ecommerce.error.UserNotFoundException;
@@ -33,7 +34,8 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, errorMessage);
     }
 
-    @ExceptionHandler({ BuyNotFoundException.class, ProductNotFoundException.class, UserNotFoundException.class })
+    @ExceptionHandler({ BuyNotFoundException.class, ProductNotFoundException.class, UserNotFoundException.class,
+            DiscountNotFoundException.class })
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(RuntimeException ex) {
         String errorMessage = ex.getClass().getSimpleName();

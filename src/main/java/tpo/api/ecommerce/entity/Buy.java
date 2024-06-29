@@ -38,6 +38,9 @@ public class Buy {
     @ToString.Exclude
     private List<ItemProduct> items;
 
+    @ManyToOne
+    private Discount discount;
+
     private BigDecimal total;
 
     @Enumerated(EnumType.STRING)

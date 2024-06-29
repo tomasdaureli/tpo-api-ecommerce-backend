@@ -14,4 +14,6 @@ public interface BuyService {
 
     BuyDTO cancelBuy(Long buyNumber);
 
+    
+
 }
