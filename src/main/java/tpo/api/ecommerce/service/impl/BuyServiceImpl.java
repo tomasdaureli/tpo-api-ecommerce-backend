@@ -124,6 +124,11 @@ public class BuyServiceImpl implements BuyService {
             throw new BuyAlreadyProcessedException(buy.getStatus().toString());
         }
 
+        buy.getItems().forEach(i -> {
+            if (!Boolean.TRUE.equals(verifyStock(i.getProduct(), i.getQuantity()))) {
+                throw new ProductWithoutStockException(i.getProduct().getProductName());
+            }
+        });
         buy.setStatus(BuyStatus.CONFIRMED);
         updateProductsStock(buy.getItems());
 

@@ -32,6 +32,7 @@ import tpo.api.ecommerce.error.ProductNotFoundException;
 import tpo.api.ecommerce.mapper.BuyMapper;
 import tpo.api.ecommerce.mapper.UserMapper;
 import tpo.api.ecommerce.repository.BuyRepository;
+import tpo.api.ecommerce.repository.DiscountRepository;
 import tpo.api.ecommerce.repository.ProductRepository;
 import tpo.api.ecommerce.service.impl.BuyServiceImpl;
 import tpo.api.ecommerce.utils.DummyDataUtils;
@@ -55,13 +56,17 @@ class BuyServiceImplTests {
     @Autowired
     private UserMapper userMapper;
 
+    @Mock
+    private DiscountRepository discountRepository;
+
     @InjectMocks
     private BuyServiceImpl service;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        service = new BuyServiceImpl(buyRepository, productRepository, buyMapper, userService, userMapper);
+        service = new BuyServiceImpl(buyRepository, productRepository, buyMapper, userService, userMapper,
+                discountRepository);
     }
 
     @Test
