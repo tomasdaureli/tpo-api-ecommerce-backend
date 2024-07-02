@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import tpo.api.ecommerce.domain.CategoryProductDTO;
@@ -59,12 +60,14 @@ public class ProductServiceImpl implements ProductService {
 		return mapper.toProductDTO(product);
 	}
 
+	@Transactional(rollbackFor = Throwable.class)
 	@Override
 	public ProductDTO createProduct(ProductDTO dto) {
 		return mapper.toProductDTO(
 				repository.save(mapper.toProduct(dto)));
 	}
 
+	@Transactional(rollbackFor = Throwable.class)
 	@Override
 	public ProductDTO updateProduct(Long productId, ProductDTO dto) {
 		Product product = repository.findById(productId)
@@ -83,6 +86,14 @@ public class ProductServiceImpl implements ProductService {
 	public List<SubcategoryProductDTO> getSubcategories() {
 		return Arrays.asList(SubcategoryProduct.values()).stream()
 				.map(mapper::toSubcategoryProductDTO).toList();
+	}
+
+	@Transactional(rollbackFor = Throwable.class)
+	@Override
+	public void deleteProduct(Long productId) {
+		Product product = repository.findById(productId)
+				.orElseThrow(ProductNotFoundException::new);
+		repository.delete(product);
 	}
 
 }
