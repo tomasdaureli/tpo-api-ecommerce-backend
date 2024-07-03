@@ -45,7 +45,7 @@ CREATE TABLE `users` (
     `last_name` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
-    `role` VARCHAR(255) DEFAULT 'COMPRADOR' CHECK (role IN ('VISITANTE', 'VENDEDOR', 'COMPRADOR'));
+    `role` VARCHAR(255) DEFAULT 'COMPRADOR' CHECK (role IN ('VISITANTE', 'VENDEDOR', 'COMPRADOR'))
 
 );
 
@@ -73,7 +73,7 @@ CREATE TABLE `discounts` (
     `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
     `code` VARCHAR(255) NOT NULL,
     `amount` DOUBLE NOT NULL,
-    `expiry_date` DATE NOT NULL
+    `exprity_date` DATE NOT NULL
 );
 
 ALTER TABLE `buys` ADD COLUMN `discount_id` BIGINT;
