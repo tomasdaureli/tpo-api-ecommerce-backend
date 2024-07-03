@@ -4,9 +4,6 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,8 +17,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class CreateDiscountDTO {
 
     @NotBlank
@@ -34,6 +29,6 @@ public class CreateDiscountDTO {
     @NotNull
     @Future
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate exprityDate;
+    private LocalDate expiryDate;
 
 }

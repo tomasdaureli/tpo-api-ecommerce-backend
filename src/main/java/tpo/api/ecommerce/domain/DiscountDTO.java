@@ -22,8 +22,8 @@ public class DiscountDTO {
 
     private String code;
 
-    private Double amount;
+    private BigDecimal amount;
 
-    private LocalDate exprityDate;
+    private LocalDate expiryDate;
 
 }
