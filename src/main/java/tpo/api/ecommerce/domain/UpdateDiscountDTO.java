@@ -29,6 +29,6 @@ public class UpdateDiscountDTO {
 
     @Future
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate exprityDate;
+    private LocalDate expiryDate;
 
 }

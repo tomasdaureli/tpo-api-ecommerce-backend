@@ -24,6 +24,6 @@ public class DiscountDTO {
 
     private Double amount;
 
-    private LocalDate exprityDate;
+    private LocalDate expiryDate;
 
 }

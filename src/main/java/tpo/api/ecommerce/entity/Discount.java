@@ -1,5 +1,6 @@
 package tpo.api.ecommerce.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
@@ -24,8 +25,8 @@ public class Discount {
 
     private String code;
 
-    private Double amount;
+    private BigDecimal amount;
 
-    private LocalDate exprityDate;
+    private LocalDate expiryDate;
 
 }
