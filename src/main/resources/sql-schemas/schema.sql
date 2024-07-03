@@ -73,7 +73,7 @@ CREATE TABLE `discounts` (
     `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
     `code` VARCHAR(255) NOT NULL,
     `amount` DOUBLE NOT NULL,
-    `exprity_date` DATE NOT NULL
+    `expiry_date` DATE NOT NULL
 );
 
 ALTER TABLE `buys` ADD COLUMN `discount_id` BIGINT;
