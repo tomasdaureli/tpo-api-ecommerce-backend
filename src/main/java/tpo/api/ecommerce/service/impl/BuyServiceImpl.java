@@ -94,7 +94,7 @@ public class BuyServiceImpl implements BuyService {
             Discount discount = getDiscountByCode(discountCode.get());
             if (discount != null) {
                 BigDecimal discountAmount = total
-                        .multiply(BigDecimal.valueOf(discount.getAmount()).divide(BigDecimal.valueOf(100)));
+                        .multiply(discount.getAmount().divide(BigDecimal.valueOf(100)));
                 total = total.subtract(discountAmount);
             }
         }

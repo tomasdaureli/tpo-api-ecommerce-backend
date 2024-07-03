@@ -80,3 +80,6 @@ ALTER TABLE `buys` ADD COLUMN `discount_id` BIGINT;
 
 ALTER TABLE `buys`
 ADD CONSTRAINT `fk_discount_id` FOREIGN KEY (`discount_id`) REFERENCES `discounts` (`id`);
+
+ALTER TABLE `discounts`
+MODIFY COLUMN `amount` DECIMAL(10, 2) NOT NULL;
