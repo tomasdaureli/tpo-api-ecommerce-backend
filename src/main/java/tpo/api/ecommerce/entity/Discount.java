@@ -26,7 +26,7 @@ public class Discount {
 
     private String code;
 
-    private BigDecimal amount;
+    private BigDecimal percentage;
 
     private LocalDate expiryDate;
 

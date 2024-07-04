@@ -89,3 +89,6 @@ ALTER TABLE `products` ADD COLUMN `seller_id` BIGINT;
 
 ALTER TABLE `products`
 ADD CONSTRAINT `fk_seller_id` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`);
+
+ALTER TABLE `discounts`
+RENAME COLUMN `amount` TO `percentage`;
