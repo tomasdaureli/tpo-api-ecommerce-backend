@@ -67,7 +67,6 @@ public class ProductController {
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
-
     }
 
     @GetMapping("/categories")
