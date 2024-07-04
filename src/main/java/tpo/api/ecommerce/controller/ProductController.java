@@ -67,7 +67,6 @@ public class ProductController {
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
-
     }
 
     @GetMapping("/categories")
@@ -85,6 +84,12 @@ public class ProductController {
     public void deleteProduct(
             @PathVariable Long productId) {
         service.deleteProduct(productId);
+    }
+
+    @GetMapping("/sellers/{sellerId}")
+    public List<ProductDTO> getProductsBySeller(
+            @PathVariable Long sellerId) {
+        return service.getProductsBySeller(sellerId);
     }
 
 }

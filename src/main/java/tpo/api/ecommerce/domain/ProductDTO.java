@@ -34,4 +34,8 @@ public class ProductDTO {
 
     private SubcategoryProductDTO subcategory;
 
+    private UserDTO seller;
+
+    private Integer sold;
+
 }

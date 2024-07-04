@@ -13,10 +13,14 @@ import tpo.api.ecommerce.domain.SubcategoryProductDTO;
 import tpo.api.ecommerce.entity.CategoryProduct;
 import tpo.api.ecommerce.entity.Product;
 import tpo.api.ecommerce.entity.SubcategoryProduct;
+import tpo.api.ecommerce.entity.User;
 import tpo.api.ecommerce.error.ProductNotFoundException;
 import tpo.api.ecommerce.mapper.ProductMapper;
+import tpo.api.ecommerce.mapper.UserMapper;
+import tpo.api.ecommerce.repository.ItemProductRepository;
 import tpo.api.ecommerce.repository.ProductRepository;
 import tpo.api.ecommerce.service.ProductService;
+import tpo.api.ecommerce.service.UserService;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +29,12 @@ public class ProductServiceImpl implements ProductService {
 	private final ProductRepository repository;
 
 	private final ProductMapper mapper;
+
+	private final UserService userService;
+
+	private final UserMapper userMapper;
+
+	private final ItemProductRepository itemsRepository;
 
 	@Override
 	public List<ProductDTO> getProducts(String category, String subcategory) {
@@ -40,31 +50,37 @@ public class ProductServiceImpl implements ProductService {
 		}
 
 		return repository.findByStockGreaterThan(0).stream()
-				.map(mapper::toProductDTO).toList();
+				.map(this::convertProductResponse)
+				.toList();
 	}
 
 	private List<ProductDTO> getProductsByCategory(CategoryProduct category) {
 		return repository.findByCategoryAndStockGreaterThan(category, 0).stream()
-				.map(mapper::toProductDTO).toList();
+				.map(this::convertProductResponse)
+				.toList();
 	}
 
 	private List<ProductDTO> getProductsBySubcategory(SubcategoryProduct subcategory) {
 		return repository.findBySubcategoryAndStockGreaterThan(subcategory, 0).stream()
-				.map(mapper::toProductDTO).toList();
+				.map(this::convertProductResponse)
+				.toList();
 	}
 
 	@Override
 	public ProductDTO getProductById(Long productId) {
 		Product product = repository.findById(productId)
 				.orElseThrow(ProductNotFoundException::new);
-		return mapper.toProductDTO(product);
+		return convertProductResponse(product);
 	}
 
 	@Transactional(rollbackFor = Throwable.class)
 	@Override
 	public ProductDTO createProduct(ProductDTO dto) {
+		Product product = mapper.toProduct(dto);
+		product.setSeller(userMapper.toUser(userService.getAuthenticatedUser()));
+
 		return mapper.toProductDTO(
-				repository.save(mapper.toProduct(dto)));
+				repository.save(product));
 	}
 
 	@Transactional(rollbackFor = Throwable.class)
@@ -94,6 +110,26 @@ public class ProductServiceImpl implements ProductService {
 		Product product = repository.findById(productId)
 				.orElseThrow(ProductNotFoundException::new);
 		repository.delete(product);
+	}
+
+	@Override
+	public List<ProductDTO> getProductsBySeller(Long sellerId) {
+		User seller = userMapper.toUser(
+				userService.getUserById(sellerId));
+
+		return repository.findBySeller(seller).stream()
+				.map(this::convertProductResponse)
+				.toList();
+	}
+
+	private ProductDTO convertProductResponse(Product product) {
+		ProductDTO dto = mapper.toProductDTO(product);
+		dto.setSold(getSoldQuantity(product));
+		return dto;
+	}
+
+	private Integer getSoldQuantity(Product product) {
+		return itemsRepository.countByProduct(product);
 	}
 
 }
