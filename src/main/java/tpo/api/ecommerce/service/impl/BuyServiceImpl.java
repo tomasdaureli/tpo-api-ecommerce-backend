@@ -49,7 +49,8 @@ public class BuyServiceImpl implements BuyService {
         }
 
         buy.setItems(items);
-        buy.setTotal(calculateTotal(items, Optional.ofNullable(request.getDiscountCode())));
+        buy.setDiscount(Optional.ofNullable(getDiscountByCode(request.getDiscountCode())).get());
+        buy.setTotal(calculateTotal(items, buy.getDiscount()));
         buy.setStatus(BuyStatus.PENDING);
         buy.setBuyer(userMapper.toUser(userService.getAuthenticatedUser()));
 
@@ -84,19 +85,16 @@ public class BuyServiceImpl implements BuyService {
         return product.getStock() >= quantity;
     }
 
-    private BigDecimal calculateTotal(List<ItemProduct> items, Optional<String> discountCode) {
+    private BigDecimal calculateTotal(List<ItemProduct> items, Discount discount) {
         BigDecimal total = items.stream()
                 .map(item -> item.getProduct().getPrice()
                         .multiply(new BigDecimal(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        if (discountCode.isPresent()) {
-            Discount discount = getDiscountByCode(discountCode.get());
-            if (discount != null) {
-                BigDecimal discountAmount = total
-                        .multiply(discount.getAmount().divide(BigDecimal.valueOf(100)));
-                total = total.subtract(discountAmount);
-            }
+        if (discount != null) {
+            BigDecimal discountAmount = total
+                    .multiply(discount.getAmount().divide(BigDecimal.valueOf(100)));
+            total = total.subtract(discountAmount);
         }
 
         return total;
