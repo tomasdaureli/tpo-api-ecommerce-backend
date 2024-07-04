@@ -87,4 +87,10 @@ public class ProductController {
         service.deleteProduct(productId);
     }
 
+    @GetMapping("/sellers/{sellerId}")
+    public List<ProductDTO> getProductsBySeller(
+            @PathVariable Long sellerId) {
+        return service.getProductsBySeller(sellerId);
+    }
+
 }

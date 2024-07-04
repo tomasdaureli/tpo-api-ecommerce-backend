@@ -29,6 +29,8 @@ import tpo.api.ecommerce.entity.Product;
 import tpo.api.ecommerce.entity.SubcategoryProduct;
 import tpo.api.ecommerce.error.ProductNotFoundException;
 import tpo.api.ecommerce.mapper.ProductMapper;
+import tpo.api.ecommerce.mapper.UserMapper;
+import tpo.api.ecommerce.repository.ItemProductRepository;
 import tpo.api.ecommerce.repository.ProductRepository;
 import tpo.api.ecommerce.service.impl.ProductServiceImpl;
 import tpo.api.ecommerce.utils.DummyDataUtils;
@@ -43,13 +45,22 @@ class ProductServiceImplTests {
     @Autowired
     private ProductMapper mapper;
 
+    @Mock
+    private UserService userService;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Mock
+    private ItemProductRepository itemsRepository;
+
     @InjectMocks
     private ProductServiceImpl service;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        service = new ProductServiceImpl(repository, mapper);
+        service = new ProductServiceImpl(repository, mapper, userService, userMapper, itemsRepository);
     }
 
     @Test

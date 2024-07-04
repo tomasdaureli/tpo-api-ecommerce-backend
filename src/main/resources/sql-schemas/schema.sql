@@ -47,6 +47,7 @@ CREATE TABLE `users` (
     `password` VARCHAR(255) NOT NULL,
     `role` VARCHAR(255) DEFAULT 'COMPRADOR' CHECK (role IN ('VISITANTE', 'VENDEDOR', 'COMPRADOR'))
 
+
 );
 
 -- Creacion de la tabla buys
@@ -83,3 +84,8 @@ ADD CONSTRAINT `fk_discount_id` FOREIGN KEY (`discount_id`) REFERENCES `discount
 
 ALTER TABLE `discounts`
 MODIFY COLUMN `amount` DECIMAL(10, 2) NOT NULL;
+
+ALTER TABLE `products` ADD COLUMN `seller_id` BIGINT;
+
+ALTER TABLE `products`
+ADD CONSTRAINT `fk_seller_id` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`);
