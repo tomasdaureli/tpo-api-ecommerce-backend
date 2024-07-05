@@ -1,9 +1,9 @@
 package tpo.api.ecommerce.service.impl;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,7 +49,9 @@ public class BuyServiceImpl implements BuyService {
         }
 
         buy.setItems(items);
-        buy.setDiscount(Optional.ofNullable(getDiscountByCode(request.getDiscountCode())).get());
+        if (request.getDiscountCode() != null) {
+            buy.setDiscount(getDiscountByCode(request.getDiscountCode()));
+        }
         buy.setTotal(calculateTotal(items, buy.getDiscount()));
         buy.setStatus(BuyStatus.PENDING);
         buy.setBuyer(userMapper.toUser(userService.getAuthenticatedUser()));
@@ -93,7 +95,7 @@ public class BuyServiceImpl implements BuyService {
 
         if (discount != null) {
             BigDecimal discountAmount = total
-                    .multiply(discount.getAmount().divide(BigDecimal.valueOf(100)));
+                    .multiply(discount.getPercentage().divide(BigDecimal.valueOf(100)));
             total = total.subtract(discountAmount);
         }
 
@@ -101,8 +103,16 @@ public class BuyServiceImpl implements BuyService {
     }
 
     private Discount getDiscountByCode(String discountCode) {
-        return discountRepository.findByCode(discountCode)
+        Discount discount = discountRepository.findByCode(discountCode)
                 .orElseThrow(DiscountNotFoundException::new);
+        if (Boolean.FALSE.equals(discountIsValid(discount))) {
+            throw new DiscountExpiredException();
+        }
+        return discount;
+    }
+
+    private Boolean discountIsValid(Discount discount) {
+        return discount.getExpiryDate().isAfter(LocalDate.now());
     }
 
     @Override
