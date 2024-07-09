@@ -90,5 +90,11 @@ ALTER TABLE `products` ADD COLUMN `seller_id` BIGINT;
 ALTER TABLE `products`
 ADD CONSTRAINT `fk_seller_id` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`);
 
-ALTER TABLE `discounts`
-RENAME COLUMN `amount` TO `percentage`;
+ALTER TABLE `discounts` RENAME COLUMN `amount` TO `percentage`;
+
+ALTER TABLE `products` ADD COLUMN `active` BOOLEAN DEFAULT TRUE;
+
+ALTER TABLE `item_products` MODIFY COLUMN `product_id` BIGINT NULL;
+
+ALTER TABLE `item_products`
+ADD CONSTRAINT `fk_item_products_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE SET NULL;
