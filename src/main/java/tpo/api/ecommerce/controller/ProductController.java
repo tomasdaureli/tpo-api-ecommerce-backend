@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import tpo.api.ecommerce.domain.CategoryProductDTO;
+import tpo.api.ecommerce.domain.CategoryProductResponseDTO;
 import tpo.api.ecommerce.domain.ProductDTO;
-import tpo.api.ecommerce.domain.SubcategoryProductDTO;
+import tpo.api.ecommerce.domain.SubcategoryProductResponseDTO;
 import tpo.api.ecommerce.entity.UserRoles;
 import tpo.api.ecommerce.service.ProductService;
 import tpo.api.ecommerce.utils.UserValidations;
@@ -71,16 +71,23 @@ public class ProductController {
     }
 
     @GetMapping("/categories")
-    public List<CategoryProductDTO> getCategories() {
+    public List<CategoryProductResponseDTO> getCategories() {
         return service.getCategories();
     }
 
     @GetMapping("/categories/subcategories")
-    public List<SubcategoryProductDTO> getSubcategories() {
+    public List<SubcategoryProductResponseDTO> getSubcategories() {
         return service.getSubcategories();
     }
 
     @DeleteMapping("/{productId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deactivateProduct(
+            @PathVariable Long productId) {
+        service.deactivateProduct(productId);
+    }
+
+    @DeleteMapping("/{productId}/permanent")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(
             @PathVariable Long productId) {

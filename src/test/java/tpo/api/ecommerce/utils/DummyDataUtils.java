@@ -7,18 +7,20 @@ import java.util.List;
 import tpo.api.ecommerce.domain.AuthenticationRequestDTO;
 import tpo.api.ecommerce.domain.BuyDTO;
 import tpo.api.ecommerce.domain.BuyStatusDTO;
-import tpo.api.ecommerce.domain.CategoryProductDTO;
+import tpo.api.ecommerce.domain.CategoryProductResponseDTO;
 import tpo.api.ecommerce.domain.CreateBuyRequestDTO;
 import tpo.api.ecommerce.domain.CreateBuyResponseDTO;
 import tpo.api.ecommerce.domain.CreateItemProductDTO;
 import tpo.api.ecommerce.domain.ItemProductDTO;
 import tpo.api.ecommerce.domain.ProductDTO;
 import tpo.api.ecommerce.domain.RegisterRequestDTO;
-import tpo.api.ecommerce.domain.SubcategoryProductDTO;
+import tpo.api.ecommerce.domain.SubcategoryProductResponseDTO;
 import tpo.api.ecommerce.entity.Buy;
 import tpo.api.ecommerce.entity.BuyStatus;
+import tpo.api.ecommerce.entity.CategoryProduct;
 import tpo.api.ecommerce.entity.ItemProduct;
 import tpo.api.ecommerce.entity.Product;
+import tpo.api.ecommerce.entity.SubcategoryProduct;
 import tpo.api.ecommerce.entity.User;
 
 public class DummyDataUtils {
@@ -45,12 +47,17 @@ public class DummyDataUtils {
         return product;
     }
 
-    public static List<CategoryProductDTO> buildCategoriesList() {
-        return Arrays.asList(CategoryProductDTO.values());
+    public static List<CategoryProductResponseDTO> buildCategoriesList() {
+        return Arrays.stream(CategoryProduct.values())
+                .map(category -> new CategoryProductResponseDTO(category.getKey(), category.getDisplayValue()))
+                .toList();
     }
 
-    public static List<SubcategoryProductDTO> buildSubcategoriesList() {
-        return Arrays.asList(SubcategoryProductDTO.values());
+    public static List<SubcategoryProductResponseDTO> buildSubcategoriesList() {
+        return Arrays.stream(SubcategoryProduct.values())
+                .map(subcategory -> new SubcategoryProductResponseDTO(subcategory.getKey(),
+                        subcategory.getDisplayValue()))
+                .toList();
     }
 
     public static CreateBuyRequestDTO buildCreateBuyRequestDTO() {

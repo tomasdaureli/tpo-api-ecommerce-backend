@@ -2,9 +2,9 @@ package tpo.api.ecommerce.service;
 
 import java.util.List;
 
-import tpo.api.ecommerce.domain.CategoryProductDTO;
+import tpo.api.ecommerce.domain.CategoryProductResponseDTO;
 import tpo.api.ecommerce.domain.ProductDTO;
-import tpo.api.ecommerce.domain.SubcategoryProductDTO;
+import tpo.api.ecommerce.domain.SubcategoryProductResponseDTO;
 
 public interface ProductService {
 
@@ -16,11 +16,13 @@ public interface ProductService {
 
     ProductDTO updateProduct(Long productId, ProductDTO dto);
 
-    List<CategoryProductDTO> getCategories();
+    List<CategoryProductResponseDTO> getCategories();
 
-    List<SubcategoryProductDTO> getSubcategories();
+    List<SubcategoryProductResponseDTO> getSubcategories();
 
     void deleteProduct(Long productId);
+
+    void deactivateProduct(Long productId);
 
     List<ProductDTO> getProductsBySeller(Long sellerId);
 
