@@ -44,4 +44,6 @@ public class Product {
     @ManyToOne
     private User seller;
 
+    private Boolean active;
+
 }
