@@ -23,10 +23,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import tpo.api.ecommerce.domain.CategoryProductDTO;
 import tpo.api.ecommerce.domain.CategoryProductResponseDTO;
 import tpo.api.ecommerce.domain.ProductDTO;
-import tpo.api.ecommerce.domain.SubcategoryProductDTO;
 import tpo.api.ecommerce.domain.SubcategoryProductResponseDTO;
 import tpo.api.ecommerce.error.ProductNotFoundException;
 import tpo.api.ecommerce.service.ProductService;

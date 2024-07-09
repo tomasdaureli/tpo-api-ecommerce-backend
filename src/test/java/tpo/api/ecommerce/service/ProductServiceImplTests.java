@@ -22,9 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import tpo.api.ecommerce.domain.CategoryProductDTO;
+import tpo.api.ecommerce.domain.CategoryProductResponseDTO;
 import tpo.api.ecommerce.domain.ProductDTO;
-import tpo.api.ecommerce.domain.SubcategoryProductDTO;
+import tpo.api.ecommerce.domain.SubcategoryProductResponseDTO;
 import tpo.api.ecommerce.entity.CategoryProduct;
 import tpo.api.ecommerce.entity.Product;
 import tpo.api.ecommerce.entity.SubcategoryProduct;
@@ -196,24 +196,22 @@ class ProductServiceImplTests {
         verify(repository, times(1)).findById(anyLong());
     }
 
-    // @Test
-    // void testGetCategories() {
-    // List<CategoryProductDTO> expectedResponse =
-    // DummyDataUtils.buildCategoriesList();
+    @Test
+    void testGetCategories() {
+        List<CategoryProductResponseDTO> expectedResponse = DummyDataUtils.buildCategoriesList();
 
-    // List<CategoryProductDTO> response = service.getCategories();
+        List<CategoryProductResponseDTO> response = service.getCategories();
 
-    // assertEquals(expectedResponse, response);
-    // }
+        assertEquals(expectedResponse.get(0).getKey(), response.get(0).getKey());
+    }
 
-    // @Test
-    // void testGetSubcategories() {
-    // List<SubcategoryProductDTO> expectedResponse =
-    // DummyDataUtils.buildSubcategoriesList();
+    @Test
+    void testGetSubcategories() {
+        List<SubcategoryProductResponseDTO> expectedResponse = DummyDataUtils.buildSubcategoriesList();
 
-    // List<SubcategoryProductDTO> response = service.getSubcategories();
+        List<SubcategoryProductResponseDTO> response = service.getSubcategories();
 
-    // assertEquals(expectedResponse, response);
-    // }
+        assertEquals(expectedResponse.get(0).getKey(), response.get(0).getKey());
+    }
 
 }

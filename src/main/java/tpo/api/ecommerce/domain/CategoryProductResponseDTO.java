@@ -13,6 +13,6 @@ public class CategoryProductResponseDTO {
 
     private String key;
 
-    private String value;
+    private String placeholder;
 
 }

@@ -13,6 +13,6 @@ public class SubcategoryProductResponseDTO {
 
     private String key;
 
-    private String value;
+    private String placeholder;
 
 }
