@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import tpo.api.ecommerce.entity.UserRoles;
 
 @Getter
 @Setter
@@ -17,18 +18,19 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class UserDTO {
-     
+
     private Long id;
- 
+
     private String name;
- 
+
     private String lastName;
- 
+
     private String email;
- 
+
     private String password;
- 
+
+    private UserRoles role;
+
     private List<BuyDTO> buys;
- 
-    
+
 }

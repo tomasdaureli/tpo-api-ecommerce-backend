@@ -1,11 +1,15 @@
 package tpo.api.ecommerce.domain;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,18 +21,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class CreateBuyResponseDTO {
+public class UpdateDiscountDTO {
 
-    private Long number;
+    private String code;
 
-    private List<ItemProductDTO> items;
+    @Positive
+    private BigDecimal amount;
 
-    private BigDecimal total;
-
-    private DiscountDTO discount;
-
-    private WarningDTO warnings;
-
-    private BuyStatusDTO status;
+    @Future
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate expiryDate;
 
 }

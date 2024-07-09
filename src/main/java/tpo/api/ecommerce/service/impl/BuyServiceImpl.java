@@ -1,10 +1,12 @@
 package tpo.api.ecommerce.service.impl;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import tpo.api.ecommerce.domain.*;
@@ -13,6 +15,7 @@ import tpo.api.ecommerce.error.*;
 import tpo.api.ecommerce.mapper.BuyMapper;
 import tpo.api.ecommerce.mapper.UserMapper;
 import tpo.api.ecommerce.repository.BuyRepository;
+import tpo.api.ecommerce.repository.DiscountRepository;
 import tpo.api.ecommerce.repository.ProductRepository;
 import tpo.api.ecommerce.service.BuyService;
 import tpo.api.ecommerce.service.UserService;
@@ -31,6 +34,9 @@ public class BuyServiceImpl implements BuyService {
 
     private final UserMapper userMapper;
 
+    private final DiscountRepository discountRepository;
+
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public CreateBuyResponseDTO createBuy(CreateBuyRequestDTO request) {
         CreateBuyResponseDTO response = new CreateBuyResponseDTO();
@@ -43,7 +49,10 @@ public class BuyServiceImpl implements BuyService {
         }
 
         buy.setItems(items);
-        buy.setTotal(calculateTotal(items));
+        if (request.getDiscountCode() != null) {
+            buy.setDiscount(getDiscountByCode(request.getDiscountCode()));
+        }
+        buy.setTotal(calculateTotal(items, buy.getDiscount()));
         buy.setStatus(BuyStatus.PENDING);
         buy.setBuyer(userMapper.toUser(userService.getAuthenticatedUser()));
 
@@ -78,11 +87,32 @@ public class BuyServiceImpl implements BuyService {
         return product.getStock() >= quantity;
     }
 
-    private BigDecimal calculateTotal(List<ItemProduct> items) {
-        return items.stream()
+    private BigDecimal calculateTotal(List<ItemProduct> items, Discount discount) {
+        BigDecimal total = items.stream()
                 .map(item -> item.getProduct().getPrice()
                         .multiply(new BigDecimal(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        if (discount != null) {
+            BigDecimal discountAmount = total
+                    .multiply(discount.getPercentage().divide(BigDecimal.valueOf(100)));
+            total = total.subtract(discountAmount);
+        }
+
+        return total;
+    }
+
+    private Discount getDiscountByCode(String discountCode) {
+        Discount discount = discountRepository.findByCode(discountCode)
+                .orElseThrow(DiscountNotFoundException::new);
+        if (Boolean.FALSE.equals(discountIsValid(discount))) {
+            throw new DiscountExpiredException();
+        }
+        return discount;
+    }
+
+    private Boolean discountIsValid(Discount discount) {
+        return discount.getExpiryDate().isAfter(LocalDate.now());
     }
 
     @Override
@@ -91,6 +121,7 @@ public class BuyServiceImpl implements BuyService {
                 .orElseThrow(BuyNotFoundException::new));
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public BuyDTO confirmBuy(Long buyNumber) {
         Buy buy = buyRepository.findById(buyNumber)
@@ -101,6 +132,11 @@ public class BuyServiceImpl implements BuyService {
             throw new BuyAlreadyProcessedException(buy.getStatus().toString());
         }
 
+        buy.getItems().forEach(i -> {
+            if (!Boolean.TRUE.equals(verifyStock(i.getProduct(), i.getQuantity()))) {
+                throw new ProductWithoutStockException(i.getProduct().getProductName());
+            }
+        });
         buy.setStatus(BuyStatus.CONFIRMED);
         updateProductsStock(buy.getItems());
 
@@ -114,6 +150,7 @@ public class BuyServiceImpl implements BuyService {
         });
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public BuyDTO cancelBuy(Long buyNumber) {
         Buy buy = buyRepository.findById(buyNumber)

@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import tpo.api.ecommerce.config.SecurityContextService;
@@ -40,13 +41,16 @@ class UserServiceImplTests {
     @Mock
     private SecurityContextService contextService;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private UserServiceImpl service;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        service = new UserServiceImpl(repository, mapper, contextService);
+        service = new UserServiceImpl(repository, mapper, contextService, passwordEncoder);
     }
 
     @Test

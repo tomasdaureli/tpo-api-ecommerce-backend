@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,6 +30,8 @@ import tpo.api.ecommerce.entity.Product;
 import tpo.api.ecommerce.entity.SubcategoryProduct;
 import tpo.api.ecommerce.error.ProductNotFoundException;
 import tpo.api.ecommerce.mapper.ProductMapper;
+import tpo.api.ecommerce.mapper.UserMapper;
+import tpo.api.ecommerce.repository.ItemProductRepository;
 import tpo.api.ecommerce.repository.ProductRepository;
 import tpo.api.ecommerce.service.impl.ProductServiceImpl;
 import tpo.api.ecommerce.utils.DummyDataUtils;
@@ -43,13 +46,22 @@ class ProductServiceImplTests {
     @Autowired
     private ProductMapper mapper;
 
+    @Mock
+    private UserService userService;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Mock
+    private ItemProductRepository itemsRepository;
+
     @InjectMocks
     private ProductServiceImpl service;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        service = new ProductServiceImpl(repository, mapper);
+        service = new ProductServiceImpl(repository, mapper, userService, userMapper, itemsRepository);
     }
 
     @Test
@@ -57,12 +69,31 @@ class ProductServiceImplTests {
         List<Product> products = List.of(DummyDataUtils.buildProduct());
         String category = null;
         String subcategory = null;
+        String productName = null;
 
         when(repository.findByStockGreaterThan(0)).thenReturn(products);
 
-        List<ProductDTO> response = service.getProducts(category, subcategory);
+        List<ProductDTO> response = service.getProducts(category, subcategory, productName);
 
         verify(repository, times(1)).findByStockGreaterThan(0);
+
+        assertEquals("Air Jordan 1 Low", response.get(0).getProductName());
+    }
+
+    @Test
+    void testGetProductsByName() {
+        List<Product> products = List.of(DummyDataUtils.buildProduct());
+        String category = null;
+        String subcategory = null;
+        String productName = "Air";
+
+        when(repository.findByProductNameContainingIgnoreCaseAndStockGreaterThan(productName, 0))
+                .thenReturn(products);
+
+        List<ProductDTO> response = service.getProducts(category, subcategory, productName);
+
+        verify(repository, times(1))
+                .findByProductNameContainingIgnoreCaseAndStockGreaterThan(anyString(), anyInt());
 
         assertEquals("Air Jordan 1 Low", response.get(0).getProductName());
     }
@@ -72,11 +103,12 @@ class ProductServiceImplTests {
         List<Product> products = List.of(DummyDataUtils.buildProduct());
         String category = "FOOTWEAR";
         String subcategory = null;
+        String productName = null;
 
         when(repository.findByCategoryAndStockGreaterThan(any(CategoryProduct.class), anyInt()))
                 .thenReturn(products);
 
-        List<ProductDTO> response = service.getProducts(category, subcategory);
+        List<ProductDTO> response = service.getProducts(category, subcategory, productName);
 
         verify(repository, times(1)).findByCategoryAndStockGreaterThan(any(CategoryProduct.class), anyInt());
 
@@ -88,11 +120,12 @@ class ProductServiceImplTests {
         List<Product> products = List.of(DummyDataUtils.buildProduct());
         String category = null;
         String subcategory = "FASHION";
+        String productName = null;
 
         when(repository.findBySubcategoryAndStockGreaterThan(any(SubcategoryProduct.class), anyInt()))
                 .thenReturn(products);
 
-        List<ProductDTO> response = service.getProducts(category, subcategory);
+        List<ProductDTO> response = service.getProducts(category, subcategory, productName);
 
         verify(repository, times(1)).findBySubcategoryAndStockGreaterThan(any(SubcategoryProduct.class), anyInt());
 
