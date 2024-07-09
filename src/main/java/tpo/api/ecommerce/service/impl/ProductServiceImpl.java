@@ -37,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
 	private final ItemProductRepository itemsRepository;
 
 	@Override
-	public List<ProductDTO> getProducts(String category, String subcategory) {
+	public List<ProductDTO> getProducts(String category, String subcategory, String productName) {
 
 		if (subcategory != null) {
 			return getProductsBySubcategory(
@@ -47,6 +47,13 @@ public class ProductServiceImpl implements ProductService {
 		if (category != null) {
 			return getProductsByCategory(
 					CategoryProduct.valueOf(category));
+		}
+
+		if (productName != null) {
+			return repository.findByProductNameContainingIgnoreCaseAndStockGreaterThan(productName, 0)
+					.stream()
+					.map(this::convertProductResponse)
+					.toList();
 		}
 
 		return repository.findByStockGreaterThan(0).stream()

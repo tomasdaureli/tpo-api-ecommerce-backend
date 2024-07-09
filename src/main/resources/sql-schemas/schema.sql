@@ -98,3 +98,6 @@ ALTER TABLE `item_products` MODIFY COLUMN `product_id` BIGINT NULL;
 
 ALTER TABLE `item_products`
 ADD CONSTRAINT `fk_item_products_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE SET NULL;
+
+ALTER TABLE `item_products`
+ADD CONSTRAINT `fk_item_products_buy_number` FOREIGN KEY (`buy_number`) REFERENCES buys (`number`) ON DELETE CASCADE;
