@@ -83,7 +83,7 @@ class BuyServiceImplTests {
         verify(productRepository, times(1)).findById(anyLong());
         verify(buyRepository, times(1)).save(any(Buy.class));
 
-        assertEquals(BigDecimal.valueOf(150), response.getTotal());
+        assertEquals(BigDecimal.valueOf(150).setScale(2), response.getTotal());
     }
 
     @Test

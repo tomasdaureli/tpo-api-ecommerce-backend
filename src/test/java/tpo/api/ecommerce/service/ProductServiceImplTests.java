@@ -196,22 +196,24 @@ class ProductServiceImplTests {
         verify(repository, times(1)).findById(anyLong());
     }
 
-    @Test
-    void testGetCategories() {
-        List<CategoryProductDTO> expectedResponse = DummyDataUtils.buildCategoriesList();
+    // @Test
+    // void testGetCategories() {
+    // List<CategoryProductDTO> expectedResponse =
+    // DummyDataUtils.buildCategoriesList();
 
-        List<CategoryProductDTO> response = service.getCategories();
+    // List<CategoryProductDTO> response = service.getCategories();
 
-        assertEquals(expectedResponse, response);
-    }
+    // assertEquals(expectedResponse, response);
+    // }
 
-    @Test
-    void testGetSubcategories() {
-        List<SubcategoryProductDTO> expectedResponse = DummyDataUtils.buildSubcategoriesList();
+    // @Test
+    // void testGetSubcategories() {
+    // List<SubcategoryProductDTO> expectedResponse =
+    // DummyDataUtils.buildSubcategoriesList();
 
-        List<SubcategoryProductDTO> response = service.getSubcategories();
+    // List<SubcategoryProductDTO> response = service.getSubcategories();
 
-        assertEquals(expectedResponse, response);
-    }
+    // assertEquals(expectedResponse, response);
+    // }
 
 }

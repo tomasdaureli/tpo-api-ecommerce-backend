@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import tpo.api.ecommerce.domain.CategoryProductDTO;
+import tpo.api.ecommerce.domain.CategoryProductResponseDTO;
 import tpo.api.ecommerce.domain.ProductDTO;
-import tpo.api.ecommerce.domain.SubcategoryProductDTO;
+import tpo.api.ecommerce.domain.SubcategoryProductResponseDTO;
 import tpo.api.ecommerce.entity.CategoryProduct;
 import tpo.api.ecommerce.entity.Product;
 import tpo.api.ecommerce.entity.SubcategoryProduct;
@@ -100,15 +100,18 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<CategoryProductDTO> getCategories() {
-		return Arrays.asList(CategoryProduct.values()).stream()
-				.map(mapper::toCategoryProductDTO).toList();
+	public List<CategoryProductResponseDTO> getCategories() {
+		return Arrays.stream(CategoryProduct.values())
+				.map(category -> new CategoryProductResponseDTO(category.getKey(), category.getDisplayValue()))
+				.toList();
 	}
 
 	@Override
-	public List<SubcategoryProductDTO> getSubcategories() {
-		return Arrays.asList(SubcategoryProduct.values()).stream()
-				.map(mapper::toSubcategoryProductDTO).toList();
+	public List<SubcategoryProductResponseDTO> getSubcategories() {
+		return Arrays.stream(SubcategoryProduct.values())
+				.map(subcategory -> new SubcategoryProductResponseDTO(subcategory.getKey(),
+						subcategory.getDisplayValue()))
+				.toList();
 	}
 
 	@Transactional(rollbackFor = Throwable.class)
@@ -117,6 +120,14 @@ public class ProductServiceImpl implements ProductService {
 		Product product = repository.findById(productId)
 				.orElseThrow(ProductNotFoundException::new);
 		repository.delete(product);
+	}
+
+	@Override
+	public void deactivateProduct(Long productId) {
+		Product product = repository.findById(productId)
+				.orElseThrow(ProductNotFoundException::new);
+		product.setActive(false);
+		repository.save(product);
 	}
 
 	@Override

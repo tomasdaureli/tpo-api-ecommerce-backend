@@ -24,8 +24,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import tpo.api.ecommerce.domain.CategoryProductDTO;
+import tpo.api.ecommerce.domain.CategoryProductResponseDTO;
 import tpo.api.ecommerce.domain.ProductDTO;
 import tpo.api.ecommerce.domain.SubcategoryProductDTO;
+import tpo.api.ecommerce.domain.SubcategoryProductResponseDTO;
 import tpo.api.ecommerce.error.ProductNotFoundException;
 import tpo.api.ecommerce.service.ProductService;
 import tpo.api.ecommerce.utils.DummyDataUtils;
@@ -192,7 +194,7 @@ class ProductControllerTests {
 
     @Test
     void testGetCategories() throws Exception {
-        List<CategoryProductDTO> expectedResponse = DummyDataUtils.buildCategoriesList();
+        List<CategoryProductResponseDTO> expectedResponse = DummyDataUtils.buildCategoriesList();
 
         when(service.getCategories()).thenReturn(expectedResponse);
 
@@ -211,7 +213,7 @@ class ProductControllerTests {
 
     @Test
     void testGetSubcategories() throws Exception {
-        List<SubcategoryProductDTO> expectedResponse = DummyDataUtils.buildSubcategoriesList();
+        List<SubcategoryProductResponseDTO> expectedResponse = DummyDataUtils.buildSubcategoriesList();
 
         when(service.getSubcategories()).thenReturn(expectedResponse);
 
