@@ -37,8 +37,9 @@ public class ProductController {
     @GetMapping
     public List<ProductDTO> getProducts(
             @RequestParam(required = false) String category,
-            @RequestParam(required = false) String subcategory) {
-        return service.getProducts(category, subcategory);
+            @RequestParam(required = false) String subcategory,
+            @RequestParam(required = false) String productName) {
+        return service.getProducts(category, subcategory, productName);
     }
 
     @GetMapping("/{productId}")

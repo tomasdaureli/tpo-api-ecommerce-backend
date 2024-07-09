@@ -19,4 +19,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findBySeller(User seller);
 
+    List<Product> findByProductNameContainingIgnoreCaseAndStockGreaterThan(String productName, Integer quantity);
+
 }

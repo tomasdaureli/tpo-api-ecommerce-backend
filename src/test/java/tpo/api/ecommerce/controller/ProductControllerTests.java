@@ -53,7 +53,7 @@ class ProductControllerTests {
     void testGetProductsWithoutParams() throws Exception {
         List<ProductDTO> expectedResponse = List.of(DummyDataUtils.buildProductDTO());
 
-        when(service.getProducts(anyString(), anyString())).thenReturn(expectedResponse);
+        when(service.getProducts(anyString(), anyString(), anyString())).thenReturn(expectedResponse);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
@@ -63,7 +63,7 @@ class ProductControllerTests {
 
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
 
-        verify(service, times(1)).getProducts(null, null);
+        verify(service, times(1)).getProducts(null, null, null);
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
@@ -72,7 +72,7 @@ class ProductControllerTests {
     void testGetProductsWithParams() throws Exception {
         List<ProductDTO> expectedResponse = List.of(DummyDataUtils.buildProductDTO());
 
-        when(service.getProducts(anyString(), anyString())).thenReturn(expectedResponse);
+        when(service.getProducts(anyString(), anyString(), anyString())).thenReturn(expectedResponse);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
@@ -87,7 +87,7 @@ class ProductControllerTests {
         MockHttpServletResponse responseSubcategory = mockMvc.perform(requestBuilderSubcategory).andReturn()
                 .getResponse();
 
-        verify(service, times(2)).getProducts(any(), any());
+        verify(service, times(2)).getProducts(any(), any(), any());
 
         assertEquals(HttpStatus.OK.value(), responseCategory.getStatus());
         assertEquals(HttpStatus.OK.value(), responseSubcategory.getStatus());
