@@ -52,23 +52,27 @@ public class ProductServiceImpl implements ProductService {
 		if (productName != null) {
 			return repository.findByProductNameContainingIgnoreCaseAndStockGreaterThan(productName, 0)
 					.stream()
+					.filter(Product::getActive)
 					.map(this::convertProductResponse)
 					.toList();
 		}
 
 		return repository.findByStockGreaterThan(0).stream()
+				.filter(Product::getActive)
 				.map(this::convertProductResponse)
 				.toList();
 	}
 
 	private List<ProductDTO> getProductsByCategory(CategoryProduct category) {
 		return repository.findByCategoryAndStockGreaterThan(category, 0).stream()
+				.filter(Product::getActive)
 				.map(this::convertProductResponse)
 				.toList();
 	}
 
 	private List<ProductDTO> getProductsBySubcategory(SubcategoryProduct subcategory) {
 		return repository.findBySubcategoryAndStockGreaterThan(subcategory, 0).stream()
+				.filter(Product::getActive)
 				.map(this::convertProductResponse)
 				.toList();
 	}
