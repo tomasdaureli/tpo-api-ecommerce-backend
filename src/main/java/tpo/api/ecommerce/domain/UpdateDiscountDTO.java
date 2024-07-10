@@ -26,7 +26,7 @@ public class UpdateDiscountDTO {
     private String code;
 
     @Positive
-    private BigDecimal amount;
+    private BigDecimal percentage;
 
     @Future
     @DateTimeFormat(pattern = "yyyy-MM-dd")

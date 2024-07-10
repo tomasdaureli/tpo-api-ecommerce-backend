@@ -24,7 +24,7 @@ public class CreateDiscountDTO {
 
     @NotNull
     @Positive
-    private Double amount;
+    private Double percentage;
 
     @NotNull
     @Future
