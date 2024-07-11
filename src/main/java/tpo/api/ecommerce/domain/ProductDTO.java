@@ -38,4 +38,6 @@ public class ProductDTO {
 
     private Integer sold;
 
+    private Boolean active;
+
 }

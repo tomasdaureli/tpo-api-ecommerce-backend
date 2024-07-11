@@ -89,6 +89,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductDTO createProduct(ProductDTO dto) {
 		Product product = mapper.toProduct(dto);
 		product.setSeller(userMapper.toUser(userService.getAuthenticatedUser()));
+		product.setActive(true);
 
 		return mapper.toProductDTO(
 				repository.save(product));
