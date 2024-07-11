@@ -10,6 +10,7 @@ import tpo.api.ecommerce.error.BuyNotFoundException;
 import tpo.api.ecommerce.error.DiscountExpiredException;
 import tpo.api.ecommerce.error.DiscountNotFoundException;
 import tpo.api.ecommerce.error.InvalidCredentialsException;
+import tpo.api.ecommerce.error.InvalidPermissionException;
 import tpo.api.ecommerce.error.ProductNotFoundException;
 import tpo.api.ecommerce.error.ProductWithoutStockException;
 import tpo.api.ecommerce.error.UserNotFoundException;
@@ -27,6 +28,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponse handleInvalidCredentialsException(InvalidCredentialsException ex) {
         return new ErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidPermissionException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleInvalidPermissionException(InvalidPermissionException ex) {
+        return new ErrorResponse(HttpStatus.FORBIDDEN, ex.getMessage());
     }
 
     @ExceptionHandler({ BuyAlreadyProcessedException.class, ProductWithoutStockException.class,

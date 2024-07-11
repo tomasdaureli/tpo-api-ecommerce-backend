@@ -8,7 +8,7 @@ import tpo.api.ecommerce.domain.SubcategoryProductResponseDTO;
 
 public interface ProductService {
 
-    List<ProductDTO> getProducts(String category, String subcategory, String productName);
+    List<ProductDTO> getProducts(String category, String subcategory, String productName, Boolean sortPriceAsc);
 
     ProductDTO getProductById(Long productId);
 
@@ -24,6 +24,7 @@ public interface ProductService {
 
     void deactivateProduct(Long productId);
 
-    List<ProductDTO> getProductsBySeller(Long sellerId);
+    List<ProductDTO> getProductsBySeller(Long sellerId, String category, String subcategory, String productName,
+            Boolean actives);
 
 }
