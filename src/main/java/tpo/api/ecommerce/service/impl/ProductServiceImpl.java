@@ -14,6 +14,7 @@ import tpo.api.ecommerce.entity.CategoryProduct;
 import tpo.api.ecommerce.entity.Product;
 import tpo.api.ecommerce.entity.SubcategoryProduct;
 import tpo.api.ecommerce.entity.User;
+import tpo.api.ecommerce.error.InvalidPermissionException;
 import tpo.api.ecommerce.error.ProductNotFoundException;
 import tpo.api.ecommerce.mapper.ProductMapper;
 import tpo.api.ecommerce.mapper.UserMapper;
@@ -98,8 +99,16 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional(rollbackFor = Throwable.class)
 	@Override
 	public ProductDTO updateProduct(Long productId, ProductDTO dto) {
+		User user = userMapper.toUser(
+				userService.getAuthenticatedUser());
+
 		Product product = repository.findById(productId)
 				.orElseThrow(ProductNotFoundException::new);
+
+		if (!product.getSeller().equals(user)) {
+			throw new InvalidPermissionException();
+		}
+
 		return mapper.toProductDTO(
 				repository.save(mapper.toUpdateProduct(dto, product)));
 	}
@@ -129,8 +138,16 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void deactivateProduct(Long productId) {
+		User user = userMapper.toUser(
+				userService.getAuthenticatedUser());
+
 		Product product = repository.findById(productId)
 				.orElseThrow(ProductNotFoundException::new);
+
+		if (!product.getSeller().getId().equals(user.getId())) {
+			throw new InvalidPermissionException();
+		}
+
 		product.setActive(false);
 		repository.save(product);
 	}
