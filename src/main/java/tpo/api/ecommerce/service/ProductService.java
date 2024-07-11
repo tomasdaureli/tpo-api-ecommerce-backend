@@ -24,6 +24,7 @@ public interface ProductService {
 
     void deactivateProduct(Long productId);
 
-    List<ProductDTO> getProductsBySeller(Long sellerId);
+    List<ProductDTO> getProductsBySeller(Long sellerId, String category, String subcategory, String productName,
+            Boolean actives);
 
 }

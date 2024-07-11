@@ -96,8 +96,12 @@ public class ProductController {
 
     @GetMapping("/sellers/{sellerId}")
     public List<ProductDTO> getProductsBySeller(
-            @PathVariable Long sellerId) {
-        return service.getProductsBySeller(sellerId);
+            @PathVariable Long sellerId,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String subcategory,
+            @RequestParam(required = false) String productName,
+            @RequestParam(required = false) Boolean actives) {
+        return service.getProductsBySeller(sellerId, category, subcategory, productName, actives);
     }
 
 }

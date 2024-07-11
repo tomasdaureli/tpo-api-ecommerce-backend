@@ -153,11 +153,17 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<ProductDTO> getProductsBySeller(Long sellerId) {
+	public List<ProductDTO> getProductsBySeller(Long sellerId,
+			String category, String subcategory, String productName, Boolean actives) {
 		User seller = userMapper.toUser(
 				userService.getUserById(sellerId));
 
 		return repository.findBySeller(seller).stream()
+				.filter(product -> category == null || product.getCategory().name().equals(category))
+				.filter(product -> subcategory == null || product.getSubcategory().name().equals(subcategory))
+				.filter(product -> productName == null
+						|| product.getProductName().toLowerCase().contains(productName.toLowerCase()))
+				.filter(product -> actives == null || product.getActive().equals(actives))
 				.map(this::convertProductResponse)
 				.toList();
 	}
