@@ -70,10 +70,11 @@ class ProductServiceImplTests {
         String category = null;
         String subcategory = null;
         String productName = null;
+        Boolean sortPriceAsc = null;
 
         when(repository.findByStockGreaterThan(0)).thenReturn(products);
 
-        List<ProductDTO> response = service.getProducts(category, subcategory, productName);
+        List<ProductDTO> response = service.getProducts(category, subcategory, productName, sortPriceAsc);
 
         verify(repository, times(1)).findByStockGreaterThan(0);
 
@@ -86,11 +87,12 @@ class ProductServiceImplTests {
         String category = null;
         String subcategory = null;
         String productName = "Air";
+        Boolean sortPriceAsc = null;
 
         when(repository.findByProductNameContainingIgnoreCaseAndStockGreaterThan(productName, 0))
                 .thenReturn(products);
 
-        List<ProductDTO> response = service.getProducts(category, subcategory, productName);
+        List<ProductDTO> response = service.getProducts(category, subcategory, productName, sortPriceAsc);
 
         verify(repository, times(1))
                 .findByProductNameContainingIgnoreCaseAndStockGreaterThan(anyString(), anyInt());
@@ -104,11 +106,12 @@ class ProductServiceImplTests {
         String category = "FOOTWEAR";
         String subcategory = null;
         String productName = null;
+        Boolean sortPriceAsc = null;
 
         when(repository.findByCategoryAndStockGreaterThan(any(CategoryProduct.class), anyInt()))
                 .thenReturn(products);
 
-        List<ProductDTO> response = service.getProducts(category, subcategory, productName);
+        List<ProductDTO> response = service.getProducts(category, subcategory, productName, sortPriceAsc);
 
         verify(repository, times(1)).findByCategoryAndStockGreaterThan(any(CategoryProduct.class), anyInt());
 
@@ -121,11 +124,12 @@ class ProductServiceImplTests {
         String category = null;
         String subcategory = "FASHION";
         String productName = null;
+        Boolean sortPriceAsc = null;
 
         when(repository.findBySubcategoryAndStockGreaterThan(any(SubcategoryProduct.class), anyInt()))
                 .thenReturn(products);
 
-        List<ProductDTO> response = service.getProducts(category, subcategory, productName);
+        List<ProductDTO> response = service.getProducts(category, subcategory, productName, sortPriceAsc);
 
         verify(repository, times(1)).findBySubcategoryAndStockGreaterThan(any(SubcategoryProduct.class), anyInt());
 

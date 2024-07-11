@@ -38,8 +38,9 @@ public class ProductController {
     public List<ProductDTO> getProducts(
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String subcategory,
-            @RequestParam(required = false) String productName) {
-        return service.getProducts(category, subcategory, productName);
+            @RequestParam(required = false) String productName,
+            @RequestParam(required = false) Boolean sortPriceAsc) {
+        return service.getProducts(category, subcategory, productName, sortPriceAsc);
     }
 
     @GetMapping("/{productId}")

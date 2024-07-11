@@ -1,6 +1,7 @@
 package tpo.api.ecommerce.service.impl;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -38,42 +39,54 @@ public class ProductServiceImpl implements ProductService {
 	private final ItemProductRepository itemsRepository;
 
 	@Override
-	public List<ProductDTO> getProducts(String category, String subcategory, String productName) {
+	public List<ProductDTO> getProducts(String category, String subcategory, String productName, Boolean sortPriceAsc) {
 
 		if (subcategory != null) {
 			return getProductsBySubcategory(
-					SubcategoryProduct.valueOf(subcategory));
+					SubcategoryProduct.valueOf(subcategory), sortPriceAsc);
 		}
 
 		if (category != null) {
 			return getProductsByCategory(
-					CategoryProduct.valueOf(category));
+					CategoryProduct.valueOf(category), sortPriceAsc);
 		}
 
 		if (productName != null) {
 			return repository.findByProductNameContainingIgnoreCaseAndStockGreaterThan(productName, 0)
 					.stream()
 					.filter(Product::getActive)
+					.sorted(sortPriceAsc != null && sortPriceAsc
+							? Comparator.comparing(Product::getPrice)
+							: Comparator.comparing(Product::getPrice).reversed())
 					.map(this::convertProductResponse)
 					.toList();
 		}
 
 		return repository.findByStockGreaterThan(0).stream()
 				.filter(Product::getActive)
+				.sorted(sortPriceAsc != null && sortPriceAsc
+						? Comparator.comparing(Product::getPrice)
+						: Comparator.comparing(Product::getPrice).reversed())
 				.map(this::convertProductResponse)
 				.toList();
 	}
 
-	private List<ProductDTO> getProductsByCategory(CategoryProduct category) {
+	private List<ProductDTO> getProductsByCategory(CategoryProduct category, Boolean sortPriceAsc) {
 		return repository.findByCategoryAndStockGreaterThan(category, 0).stream()
 				.filter(Product::getActive)
+				.sorted(sortPriceAsc != null && sortPriceAsc
+						? Comparator.comparing(Product::getPrice)
+						: Comparator.comparing(Product::getPrice).reversed())
 				.map(this::convertProductResponse)
 				.toList();
 	}
 
-	private List<ProductDTO> getProductsBySubcategory(SubcategoryProduct subcategory) {
+	private List<ProductDTO> getProductsBySubcategory(SubcategoryProduct subcategory, Boolean sortPriceAsc) {
 		return repository.findBySubcategoryAndStockGreaterThan(subcategory, 0).stream()
 				.filter(Product::getActive)
+				.sorted(sortPriceAsc != null && sortPriceAsc
+						? Comparator.comparing(Product::getPrice)
+						: Comparator.comparing(Product::getPrice).reversed())
 				.map(this::convertProductResponse)
 				.toList();
 	}
