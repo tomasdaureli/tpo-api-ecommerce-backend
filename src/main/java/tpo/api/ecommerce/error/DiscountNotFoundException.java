@@ -10,7 +10,7 @@ import tpo.api.ecommerce.entity.Discount;
 public class DiscountNotFoundException extends RuntimeException {
 
     public DiscountNotFoundException() {
-        super(String.format("No se ah encontrado el codigo de descuento solicitado"));
+        super(String.format("No se ha encontrado el codigo de descuento solicitado"));
     }
 
 }

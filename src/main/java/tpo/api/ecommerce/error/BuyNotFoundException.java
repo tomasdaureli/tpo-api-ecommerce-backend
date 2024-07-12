@@ -10,7 +10,7 @@ import tpo.api.ecommerce.entity.Buy;
 public class BuyNotFoundException extends RuntimeException {
 
     public BuyNotFoundException() {
-        super(String.format("No se ah encontrado la compra solicitada"));
+        super(String.format("No se ha encontrado la compra solicitada"));
     }
 
 }
