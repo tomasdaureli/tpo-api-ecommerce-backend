@@ -118,7 +118,7 @@ public class ProductServiceImpl implements ProductService {
 		Product product = repository.findById(productId)
 				.orElseThrow(ProductNotFoundException::new);
 
-		if (!product.getSeller().equals(user)) {
+		if (!product.getSeller().getId().equals(user.getId())) {
 			throw new InvalidPermissionException();
 		}
 
@@ -144,8 +144,16 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional(rollbackFor = Throwable.class)
 	@Override
 	public void deleteProduct(Long productId) {
+		User user = userMapper.toUser(
+				userService.getAuthenticatedUser());
+
 		Product product = repository.findById(productId)
 				.orElseThrow(ProductNotFoundException::new);
+
+		if (!product.getSeller().getId().equals(user.getId())) {
+			throw new InvalidPermissionException();
+		}
+
 		repository.delete(product);
 	}
 
