@@ -22,48 +22,56 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(MethodArgumentNotValidException ex) {
-        return new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getClass().getSimpleName(), ex.getMessage());
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponse handleInvalidCredentialsException(InvalidCredentialsException ex) {
-        return new ErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        return new ErrorResponse(HttpStatus.UNAUTHORIZED, ex.getClass().getSimpleName(), ex.getMessage());
     }
 
     @ExceptionHandler(InvalidPermissionException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponse handleInvalidPermissionException(InvalidPermissionException ex) {
-        return new ErrorResponse(HttpStatus.FORBIDDEN, ex.getMessage());
+        return new ErrorResponse(HttpStatus.FORBIDDEN, ex.getClass().getSimpleName(), ex.getMessage());
     }
 
     @ExceptionHandler({ BuyAlreadyProcessedException.class, ProductWithoutStockException.class,
             DiscountExpiredException.class, DiscountCodeAlreadyExistsException.class })
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ErrorResponse handleCustomException(RuntimeException ex) {
+        String code = ex.getClass().getSimpleName();
         String errorMessage = ex.getMessage();
-        return new ErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, errorMessage);
+        return new ErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, code, errorMessage);
     }
 
     @ExceptionHandler({ BuyNotFoundException.class, ProductNotFoundException.class, UserNotFoundException.class,
             DiscountNotFoundException.class })
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(RuntimeException ex) {
-        String errorMessage = ex.getClass().getSimpleName();
-        return new ErrorResponse(HttpStatus.NOT_FOUND, errorMessage);
+        String code = ex.getClass().getSimpleName();
+        String errorMessage = ex.getMessage();
+        return new ErrorResponse(HttpStatus.NOT_FOUND, code, errorMessage);
     }
 
     public static class ErrorResponse {
         private final int status;
+        private final String code;
         private final String message;
 
-        public ErrorResponse(HttpStatus status, String message) {
+        public ErrorResponse(HttpStatus status, String code, String message) {
             this.status = status.value();
+            this.code = code;
             this.message = message;
         }
 
         public int getStatus() {
             return status;
+        }
+
+        public String getCode() {
+            return code;
         }
 
         public String getMessage() {
