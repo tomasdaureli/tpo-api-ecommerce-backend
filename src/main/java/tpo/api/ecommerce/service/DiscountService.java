@@ -14,6 +14,8 @@ public interface DiscountService {
 
     DiscountDTO getDiscountById(Long discountId);
 
+    DiscountDTO getDiscountByCode(String discountCode);
+
     DiscountDTO updateDiscountCode(Long discountId, UpdateDiscountDTO dto);
 
     void deleteDiscountCode(Long discountId);

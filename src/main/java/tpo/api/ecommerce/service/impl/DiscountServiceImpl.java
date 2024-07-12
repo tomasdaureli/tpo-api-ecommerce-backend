@@ -1,5 +1,6 @@
 package tpo.api.ecommerce.service.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import tpo.api.ecommerce.domain.DiscountDTO;
 import tpo.api.ecommerce.domain.UpdateDiscountDTO;
 import tpo.api.ecommerce.entity.Discount;
 import tpo.api.ecommerce.error.DiscountCodeAlreadyExistsException;
+import tpo.api.ecommerce.error.DiscountExpiredException;
 import tpo.api.ecommerce.error.DiscountNotFoundException;
 import tpo.api.ecommerce.mapper.DiscountMapper;
 import tpo.api.ecommerce.repository.DiscountRepository;
@@ -46,6 +48,18 @@ public class DiscountServiceImpl implements DiscountService {
     public DiscountDTO getDiscountById(Long discountId) {
         Discount discount = repository.findById(discountId)
                 .orElseThrow(DiscountNotFoundException::new);
+
+        return mapper.toDiscountDTO(discount);
+    }
+
+    @Override
+    public DiscountDTO getDiscountByCode(String discountCode) {
+        Discount discount = repository.findByCode(discountCode)
+                .orElseThrow(DiscountNotFoundException::new);
+
+        if (LocalDate.now().isAfter(discount.getExpiryDate())) {
+            throw new DiscountExpiredException();
+        }
 
         return mapper.toDiscountDTO(discount);
     }
