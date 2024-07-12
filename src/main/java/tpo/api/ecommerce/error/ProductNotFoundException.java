@@ -10,7 +10,7 @@ import tpo.api.ecommerce.entity.Product;
 public class ProductNotFoundException extends RuntimeException {
 
     public ProductNotFoundException() {
-        super(Product.class.getCanonicalName());
+        super(String.format("Producto no encontrado"));
     }
 
 }
