@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import tpo.api.ecommerce.config.SecurityContextService;
 import tpo.api.ecommerce.domain.UserDTO;
+import tpo.api.ecommerce.error.EmailAlreadyRegisteredException;
 import tpo.api.ecommerce.error.UserNotFoundException;
 import tpo.api.ecommerce.mapper.UserMapper;
 import tpo.api.ecommerce.repository.UserRepository;
@@ -37,6 +38,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updateUser(UserDTO dto) {
+        if (dto.getEmail() != null
+                && userExists(dto.getEmail())) {
+            throw new EmailAlreadyRegisteredException(dto.getEmail());
+        }
+
         return repository.findByEmail(contextService.getAuthenticatedUser())
                 .map(user -> {
                     user.setName(dto.getName());
@@ -47,6 +53,10 @@ public class UserServiceImpl implements UserService {
                     return mapper.toUserDTO(repository.save(user));
                 })
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    private Boolean userExists(String email) {
+        return repository.findByEmail(email).isPresent();
     }
 
 }

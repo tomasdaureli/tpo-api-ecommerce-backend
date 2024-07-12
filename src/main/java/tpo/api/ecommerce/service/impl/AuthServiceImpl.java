@@ -9,6 +9,7 @@ import tpo.api.ecommerce.domain.AuthenticationRequestDTO;
 import tpo.api.ecommerce.domain.AuthenticationResponseDTO;
 import tpo.api.ecommerce.domain.RegisterRequestDTO;
 import tpo.api.ecommerce.entity.User;
+import tpo.api.ecommerce.error.EmailAlreadyRegisteredException;
 import tpo.api.ecommerce.error.InvalidCredentialsException;
 import tpo.api.ecommerce.error.UserNotFoundException;
 import tpo.api.ecommerce.mapper.AuthMapper;
@@ -29,6 +30,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthenticationResponseDTO registerUser(RegisterRequestDTO request) {
+        if (Boolean.TRUE.equals(emailRegistered(request.getEmail()))) {
+            throw new EmailAlreadyRegisteredException(request.getEmail());
+        }
         User user = mapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user = userRepository.save(user);
@@ -50,6 +54,10 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = jwtService.generateToken(user.getId().toString(), user.getEmail());
 
         return new AuthenticationResponseDTO(accessToken);
+    }
+
+    private Boolean emailRegistered(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 
 }
