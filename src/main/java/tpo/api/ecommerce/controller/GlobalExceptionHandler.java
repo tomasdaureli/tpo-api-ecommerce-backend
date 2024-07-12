@@ -10,6 +10,7 @@ import tpo.api.ecommerce.error.BuyNotFoundException;
 import tpo.api.ecommerce.error.DiscountCodeAlreadyExistsException;
 import tpo.api.ecommerce.error.DiscountExpiredException;
 import tpo.api.ecommerce.error.DiscountNotFoundException;
+import tpo.api.ecommerce.error.EmailAlreadyRegisteredException;
 import tpo.api.ecommerce.error.InvalidCredentialsException;
 import tpo.api.ecommerce.error.InvalidPermissionException;
 import tpo.api.ecommerce.error.ProductNotFoundException;
@@ -38,7 +39,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({ BuyAlreadyProcessedException.class, ProductWithoutStockException.class,
-            DiscountExpiredException.class, DiscountCodeAlreadyExistsException.class })
+            DiscountExpiredException.class, DiscountCodeAlreadyExistsException.class,
+            EmailAlreadyRegisteredException.class })
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ErrorResponse handleCustomException(RuntimeException ex) {
         String code = ex.getClass().getSimpleName();

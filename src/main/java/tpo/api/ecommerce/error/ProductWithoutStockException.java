@@ -14,7 +14,7 @@ public class ProductWithoutStockException extends RuntimeException {
 
     public ProductWithoutStockException(String productName) {
         super(String.format(
-                "No hay stock disponible para el producto %s", productName));
+                "No hay stock disponible para el producto: \n -[%s]", productName));
     }
 
 }
