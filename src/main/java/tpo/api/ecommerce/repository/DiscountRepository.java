@@ -10,4 +10,6 @@ public interface DiscountRepository extends JpaRepository<Discount, Long> {
 
     Optional<Discount> findByCode(String code);
 
+    Optional<Discount> findByCodeIgnoreCase(String code);
+
 }

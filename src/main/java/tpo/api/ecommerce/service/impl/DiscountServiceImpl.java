@@ -10,6 +10,7 @@ import tpo.api.ecommerce.domain.CreateDiscountDTO;
 import tpo.api.ecommerce.domain.DiscountDTO;
 import tpo.api.ecommerce.domain.UpdateDiscountDTO;
 import tpo.api.ecommerce.entity.Discount;
+import tpo.api.ecommerce.error.DiscountCodeAlreadyExistsException;
 import tpo.api.ecommerce.error.DiscountNotFoundException;
 import tpo.api.ecommerce.mapper.DiscountMapper;
 import tpo.api.ecommerce.repository.DiscountRepository;
@@ -34,6 +35,10 @@ public class DiscountServiceImpl implements DiscountService {
     public DiscountDTO createDiscountCode(CreateDiscountDTO dto) {
         Discount discount = mapper.toDiscountFromCreateDTO(dto);
 
+        if (Boolean.TRUE.equals(codeExists(dto.getCode()))) {
+            throw new DiscountCodeAlreadyExistsException(dto.getCode());
+        }
+
         return mapper.toDiscountDTO(repository.save(discount));
     }
 
@@ -51,6 +56,11 @@ public class DiscountServiceImpl implements DiscountService {
         Discount discount = repository.findById(discountId)
                 .orElseThrow(DiscountNotFoundException::new);
 
+        if (dto.getCode() != null
+                && codeExists(dto.getCode())) {
+            throw new DiscountCodeAlreadyExistsException(dto.getCode());
+        }
+
         return mapper.toDiscountDTO(
                 repository.save(
                         mapper.toDiscountFromUpdateDTO(dto, discount)));
@@ -61,6 +71,10 @@ public class DiscountServiceImpl implements DiscountService {
         Discount discount = repository.findById(discountId)
                 .orElseThrow(DiscountNotFoundException::new);
         repository.delete(discount);
+    }
+
+    private Boolean codeExists(String code) {
+        return repository.findByCodeIgnoreCase(code).isPresent();
     }
 
 }

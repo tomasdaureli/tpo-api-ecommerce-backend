@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tpo.api.ecommerce.error.BuyAlreadyProcessedException;
 import tpo.api.ecommerce.error.BuyNotFoundException;
+import tpo.api.ecommerce.error.DiscountCodeAlreadyExistsException;
 import tpo.api.ecommerce.error.DiscountExpiredException;
 import tpo.api.ecommerce.error.DiscountNotFoundException;
 import tpo.api.ecommerce.error.InvalidCredentialsException;
@@ -37,7 +38,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({ BuyAlreadyProcessedException.class, ProductWithoutStockException.class,
-            DiscountExpiredException.class })
+            DiscountExpiredException.class, DiscountCodeAlreadyExistsException.class })
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ErrorResponse handleCustomException(RuntimeException ex) {
         String errorMessage = ex.getClass().getSimpleName();

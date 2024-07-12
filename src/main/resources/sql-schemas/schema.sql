@@ -101,3 +101,5 @@ ADD CONSTRAINT `fk_item_products_product_id` FOREIGN KEY (`product_id`) REFERENC
 
 ALTER TABLE `item_products`
 ADD CONSTRAINT `fk_item_products_buy_number` FOREIGN KEY (`buy_number`) REFERENCES buys (`number`) ON DELETE CASCADE;
+
+ALTER TABLE `discounts` ADD CONSTRAINT `unique_code` UNIQUE (`code`);
