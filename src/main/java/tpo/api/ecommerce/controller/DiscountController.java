@@ -44,6 +44,12 @@ public class DiscountController {
         return service.getDiscountById(discountId);
     }
 
+    @GetMapping("/code/{discountCode}")
+    public DiscountDTO getDiscountByCode(
+            @PathVariable String discountCode) {
+        return service.getDiscountByCode(discountCode);
+    }
+
     @PatchMapping("/{discountId}")
     public DiscountDTO updateDiscount(
             @PathVariable Long discountId,
