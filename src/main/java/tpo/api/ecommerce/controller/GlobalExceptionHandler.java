@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
             DiscountExpiredException.class, DiscountCodeAlreadyExistsException.class })
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ErrorResponse handleCustomException(RuntimeException ex) {
-        String errorMessage = ex.getClass().getSimpleName();
+        String errorMessage = ex.getMessage();
         return new ErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, errorMessage);
     }
 
